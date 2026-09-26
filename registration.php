@@ -10,15 +10,20 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Daftar Kursus - KursusKu</title>
+    <title>
+        Daftar Kursus - KursusKu
+    </title>
 
     <link
         rel="stylesheet"
-        <link rel="stylesheet" href="assets/css/style.css?v=2">
+        href="assets/css/style.css"
     >
-    
+
 </head>
+
+
 <body>
+
 
 <header class="site-header">
 
@@ -31,7 +36,8 @@
             KursusKu
         </a>
 
-        <div class="nav-links">
+
+        <nav class="nav-links">
 
             <a href="index.php">
                 Katalog
@@ -41,19 +47,25 @@
                 Daftar Kursus
             </a>
 
-        </div>
+        </nav>
 
     </div>
 
 </header>
 
 
+
 <main class="container">
+
+
+    <!-- =====================================================
+         JUDUL
+         ===================================================== -->
 
     <section class="page-intro">
 
         <p class="eyebrow">
-            Pendaftaran
+            Pendaftaran Kursus
         </p>
 
         <h1>
@@ -61,19 +73,40 @@
         </h1>
 
         <p>
-            Silakan isi data berikut untuk mendaftar kursus.
+            Isi data berikut untuk melakukan pendaftaran.
         </p>
 
     </section>
 
 
+
+    <!-- =====================================================
+         FORM
+         ===================================================== -->
+
     <section class="form-card">
+
+
+        <!-- =================================================
+             INI ADALAH FORM POST
+             =================================================
+
+             Perhatikan:
+
+             method="POST"
+
+             Jadi Daftar Sekarang menggunakan POST.
+
+             ================================================= -->
 
         <form
             action="process-registration.php"
             method="POST"
             class="registration-form"
         >
+
+
+            <!-- SOURCE -->
 
             <input
                 type="hidden"
@@ -82,7 +115,11 @@
             >
 
 
+
             <div class="form-grid">
+
+
+                <!-- NAMA -->
 
                 <div class="form-group">
 
@@ -95,14 +132,14 @@
                         id="name"
                         name="name"
                         placeholder="Masukkan nama lengkap"
-                        minlength="3"
-                        maxlength="100"
-                        autocomplete="name"
                         required
                     >
 
                 </div>
 
+
+
+                <!-- EMAIL -->
 
                 <div class="form-group">
 
@@ -115,12 +152,14 @@
                         id="email"
                         name="email"
                         placeholder="contoh@email.com"
-                        autocomplete="email"
                         required
                     >
 
                 </div>
 
+
+
+                <!-- NOMOR HP -->
 
                 <div class="form-group">
 
@@ -129,16 +168,18 @@
                     </label>
 
                     <input
-                        type="tel"
+                        type="text"
                         id="phone"
                         name="phone"
                         placeholder="08xxxxxxxxxx"
-                        autocomplete="tel"
                         required
                     >
 
                 </div>
 
+
+
+                <!-- PROGRAM STUDI -->
 
                 <div class="form-group">
 
@@ -146,163 +187,298 @@
                         Program Studi
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         id="study_program"
                         name="study_program"
-                        placeholder="Contoh: PTIK"
                         required
                     >
+
+                        <option value="">
+                            -- Pilih Program Studi --
+                        </option>
+
+                        <option value="PTIK">
+                            PTIK
+                        </option>
+
+                        <option value="Informatika">
+                            Informatika
+                        </option>
+
+                        <option value="Sistem Informasi">
+                            Sistem Informasi
+                        </option>
+
+                        <option value="Manajemen">
+                            Manajemen
+                        </option>
+
+                    </select>
 
                 </div>
 
-            </div>
 
 
-            <div class="form-group">
+                <!-- KURSUS -->
 
-                <label for="course">
-                    Pilih Kursus
-                </label>
+                <div class="form-group">
 
-                <select
-                    id="course"
-                    name="course"
-                    required
-                >
+                    <label for="course">
+                        Kursus
+                    </label>
 
-                    <option value="">
-                        -- Pilih Kursus --
-                    </option>
-
-                    <option value="web-dasar">
-                        Web Dasar
-                    </option>
-
-                    <option value="php-dasar">
-                        PHP Dasar
-                    </option>
-
-                    <option value="laravel-fundamental">
-                        Laravel Fundamental
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <fieldset class="form-group">
-
-                <legend>
-                    Jenis Peserta
-                </legend>
-
-                <label class="choice">
-
-                    <input
-                        type="radio"
-                        name="participant_type"
-                        value="mahasiswa"
+                    <select
+                        id="course"
+                        name="course"
                         required
                     >
 
-                    Mahasiswa
+                        <option value="">
+                            -- Pilih Kursus --
+                        </option>
 
-                </label>
+                        <option value="web-dasar">
+                            Web Dasar
+                        </option>
 
+                        <option value="php">
+                            PHP
+                        </option>
 
-                <label class="choice">
+                        <option value="mysql">
+                            MySQL
+                        </option>
 
-                    <input
-                        type="radio"
-                        name="participant_type"
-                        value="umum"
-                    >
+                        <option value="ui-ux">
+                            UI/UX Design
+                        </option>
 
-                    Umum
+                    </select>
 
-                </label>
-
-            </fieldset>
-
-
-            <fieldset class="form-group">
-
-                <legend>
-                    Minat Belajar
-                </legend>
-
-                <label class="choice">
-
-                    <input
-                        type="checkbox"
-                        name="interests[]"
-                        value="ui-ux"
-                    >
-
-                    UI/UX
-
-                </label>
+                </div>
 
 
-                <label class="choice">
 
-                    <input
-                        type="checkbox"
-                        name="interests[]"
-                        value="database"
-                    >
+                <!-- JENIS PESERTA -->
 
-                    Database
+                <div class="form-group">
 
-                </label>
+                    <label>
+                        Jenis Peserta
+                    </label>
 
 
-                <label class="choice">
-
-                    <input
-                        type="checkbox"
-                        name="interests[]"
-                        value="backend"
-                    >
-
-                    Backend
-
-                </label>
-
-            </fieldset>
+                    <div class="choice-group">
 
 
-            <div class="form-group">
+                        <label class="choice">
 
-                <label for="note">
-                    Catatan
-                </label>
+                            <input
+                                type="radio"
+                                name="participant_type"
+                                value="mahasiswa"
+                                required
+                            >
 
-                <textarea
-                    id="note"
-                    name="note"
-                    rows="5"
-                    maxlength="500"
-                    placeholder="Tuliskan catatan jika ada..."
-                ></textarea>
+                            <span>
+                                Mahasiswa
+                            </span>
+
+                        </label>
+
+
+                        <label class="choice">
+
+                            <input
+                                type="radio"
+                                name="participant_type"
+                                value="pelajar"
+                            >
+
+                            <span>
+                                Pelajar
+                            </span>
+
+                        </label>
+
+
+                        <label class="choice">
+
+                            <input
+                                type="radio"
+                                name="participant_type"
+                                value="umum"
+                            >
+
+                            <span>
+                                Umum
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MINAT BELAJAR -->
+
+                <div class="form-group">
+
+                    <label>
+                        Minat Belajar
+                    </label>
+
+
+                    <div class="choice-group">
+
+
+                        <label class="choice">
+
+                            <input
+                                type="checkbox"
+                                name="interests[]"
+                                value="web-development"
+                            >
+
+                            <span>
+                                Web Development
+                            </span>
+
+                        </label>
+
+
+                        <label class="choice">
+
+                            <input
+                                type="checkbox"
+                                name="interests[]"
+                                value="ui-ux"
+                            >
+
+                            <span>
+                                UI/UX
+                            </span>
+
+                        </label>
+
+
+                        <label class="choice">
+
+                            <input
+                                type="checkbox"
+                                name="interests[]"
+                                value="database"
+                            >
+
+                            <span>
+                                Database
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CATATAN -->
+
+                <div class="form-group full-width">
+
+                    <label for="note">
+                        Catatan
+                    </label>
+
+                    <textarea
+                        id="note"
+                        name="note"
+                        rows="5"
+                        placeholder="Tulis catatan jika ada..."
+                    ></textarea>
+
+                </div>
+
 
             </div>
 
 
-            <button
-                type="submit"
-                class="btn-primary"
-            >
-                Kirim Pendaftaran
-            </button>
+
+            <!-- =================================================
+                 TOMBOL
+                 ================================================= -->
+
+            <div class="form-actions">
+
+
+                <!-- KEMBALI -->
+
+                <a
+                    href="index.php"
+                    class="btn-secondary"
+                >
+                    Kembali
+                </a>
+
+
+
+                <!-- POST -->
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    ✓ Daftar Sekarang
+                </button>
+
+
+
+                <!-- =================================================
+                     GET
+                     =================================================
+
+                     INI TOMBOL GET.
+
+                     Klik tombol ini untuk menguji GET.
+
+                     ================================================= -->
+
+                <a
+                    href="process-registration.php?method=get&name=Tes+GET&email=test%40kursusku.com&phone=08123456789&study_program=PTIK&course=web-dasar&participant_type=mahasiswa&interests%5B%5D=web-development&note=Percobaan+GET&source=week-05"
+                    class="btn-secondary"
+                >
+                    ↗ Tes GET
+                </a>
+
+
+            </div>
+
 
         </form>
 
     </section>
 
+
 </main>
+
+
+
+<footer>
+
+    <div class="container">
+
+        <p>
+            &copy; 2026 KursusKu
+        </p>
+
+    </div>
+
+</footer>
+
 
 </body>
 
