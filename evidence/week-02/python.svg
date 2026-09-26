@@ -1,0 +1,23 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="800" height="500" fill="#101010"></rect>
+
+<circle cx="680" cy="400" r="150" fill="#FFD43B"></circle>
+
+<rect x="150" y="80" width="500" height="340" rx="30" fill="#FFF"></rect>
+
+<rect x="180" y="115" width="440" height="55" rx="15" fill="#101010"></rect>
+
+<circle cx="210" cy="142" r="8" fill="#FFD43B"></circle>
+<circle cx="240" cy="142" r="8" fill="#FFD43B"></circle>
+<circle cx="270" cy="142" r="8" fill="#FFD43B"></circle>
+
+<text x="210" y="245" font-size="65" font-family="Arial" font-weight="bold" fill="#101010">
+PY
+</text>
+
+<rect x="210" y="285" width="300" height="20" rx="10" fill="#FFD43B"></rect>
+
+<rect x="210" y="325" width="240" height="18" rx="9" fill="#DDDDDD"></rect>
+
+</svg>

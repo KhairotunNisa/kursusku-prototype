@@ -1,434 +1,102 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| PROCESS REGISTRATION
-|--------------------------------------------------------------------------
-|
-| File ini menerima:
-|
-| POST = tombol "Daftar Sekarang"
-|
-| GET  = tombol "Tes GET"
-|
-|--------------------------------------------------------------------------
-*/
+$name = trim($_GET['name'] ?? '');
+$email = trim($_GET['email'] ?? '');
+$phone = trim($_GET['phone'] ?? '');
+
+$study_program = trim($_GET['study_program'] ?? '');
+$course = trim($_GET['course'] ?? '');
+
+$participant_type = trim(
+    $_GET['participant_type'] ?? ''
+);
+
+$interests = $_GET['interests'] ?? [];
+
+$note = trim($_GET['note'] ?? '');
+
+$source = trim($_GET['source'] ?? '');
 
 
-/*
-|--------------------------------------------------------------------------
-| CEK METHOD
-|--------------------------------------------------------------------------
-*/
+if (!is_array($interests)) {
+    $interests = [$interests];
+}
 
-$method = $_SERVER['REQUEST_METHOD'];
-
-
-/*
-|--------------------------------------------------------------------------
-| VARIABEL
-|--------------------------------------------------------------------------
-*/
-
-$name = '';
-$email = '';
-$phone = '';
-
-$study_program = '';
-$course = '';
-$participant_type = '';
-
-$interests = [];
-
-$note = '';
-$source = '';
 
 $errors = [];
 
 
-/*
-|--------------------------------------------------------------------------
-| POST
-|--------------------------------------------------------------------------
-|
-| Bagian ini dijalankan ketika tombol
-| "Daftar Sekarang" ditekan.
-|
-*/
-
-if ($method === 'POST') {
-
-
-    $name = trim(
-        $_POST['name'] ?? ''
-    );
-
-
-    $email = trim(
-        $_POST['email'] ?? ''
-    );
-
-
-    $phone = trim(
-        $_POST['phone'] ?? ''
-    );
-
-
-    $study_program = trim(
-        $_POST['study_program'] ?? ''
-    );
-
-
-    $course = trim(
-        $_POST['course'] ?? ''
-    );
-
-
-    $participant_type = trim(
-        $_POST['participant_type'] ?? ''
-    );
-
-
-    $interests = $_POST['interests'] ?? [];
-
-
-    $note = trim(
-        $_POST['note'] ?? ''
-    );
-
-
-    $source = trim(
-        $_POST['source'] ?? ''
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Pastikan interests berupa array
-    |--------------------------------------------------------------------------
-    */
-
-    if (!is_array($interests)) {
-
-        $interests = [$interests];
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDASI
-    |--------------------------------------------------------------------------
-    */
-
-    if ($name === '') {
-
-        $errors[] =
-            'Nama Lengkap belum diisi.';
-
-    }
-
-
-    if ($email === '') {
-
-        $errors[] =
-            'Email belum diisi.';
-
-    }
-    elseif (
-        !filter_var(
-            $email,
-            FILTER_VALIDATE_EMAIL
-        )
-    ) {
-
-        $errors[] =
-            'Format email tidak valid.';
-
-    }
-
-
-    if ($phone === '') {
-
-        $errors[] =
-            'Nomor HP belum diisi.';
-
-    }
-
-
-    if ($study_program === '') {
-
-        $errors[] =
-            'Program Studi belum dipilih.';
-
-    }
-
-
-    if ($course === '') {
-
-        $errors[] =
-            'Kursus belum dipilih.';
-
-    }
-
-
-    if ($participant_type === '') {
-
-        $errors[] =
-            'Jenis Peserta belum dipilih.';
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | JIKA ERROR
-    |--------------------------------------------------------------------------
-    */
-
-    if (!empty($errors)) {
-
-        ?>
-
-        <!DOCTYPE html>
-
-        <html lang="id">
-
-        <head>
-
-            <meta charset="UTF-8">
-
-            <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0"
-            >
-
-            <title>
-                Data Tidak Lengkap - KursusKu
-            </title>
-
-            <link
-                rel="stylesheet"
-                href="assets/css/style.css"
-            >
-
-        </head>
-
-
-        <body>
-
-        <main class="container">
-
-            <section class="page-intro">
-
-                <p class="eyebrow">
-                    Pendaftaran
-                </p>
-
-                <h1>
-                    Data Tidak Lengkap
-                </h1>
-
-            </section>
-
-
-            <section class="summary-card">
-
-                <div class="alert alert-danger">
-
-                    <strong>
-                        Terdapat kesalahan:
-                    </strong>
-
-
-                    <ul>
-
-                        <?php foreach ($errors as $error): ?>
-
-                            <li>
-                                <?= htmlspecialchars($error) ?>
-                            </li>
-
-                        <?php endforeach; ?>
-
-                    </ul>
-
-                </div>
-
-
-                <div class="form-actions">
-
-                    <a
-                        href="registration.php"
-                        class="btn-primary"
-                    >
-                        Kembali ke Form
-                    </a>
-
-                </div>
-
-            </section>
-
-        </main>
-
-        </body>
-
-        </html>
-
-        <?php
-
-        exit;
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | POST BERHASIL
-    |--------------------------------------------------------------------------
-    */
-
-    $pageTitle =
-        'Pendaftaran Berhasil';
-
-    $pageMessage =
-        'Data pendaftaran berhasil dikirim menggunakan method POST.';
-
-    $alertTitle =
-        'Pendaftaran Diterima untuk Diproses';
-
-    $isGet = false;
-
+if ($name === '') {
+    $errors[] = 'Nama lengkap wajib diisi.';
+}
+
+if ($email === '') {
+    $errors[] = 'Email wajib diisi.';
+}
+
+if ($phone === '') {
+    $errors[] = 'Nomor HP wajib diisi.';
+}
+
+if ($study_program === '') {
+    $errors[] = 'Program studi wajib dipilih.';
+}
+
+if ($course === '') {
+    $errors[] = 'Kursus wajib dipilih.';
+}
+
+if ($participant_type === '') {
+    $errors[] = 'Tipe peserta wajib dipilih.';
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| GET
-|--------------------------------------------------------------------------
-|
-| ==============================================================
-| INI BAGIAN GET
-| ==============================================================
-|
-| Data GET dibaca menggunakan $_GET.
-|
-|--------------------------------------------------------------------------
-*/
-
-elseif ($method === 'GET') {
-
-
-    /*
-    |--------------------------------------------------------------
-    | AMBIL DATA GET
-    |--------------------------------------------------------------
-    */
-
-    $name = trim(
-        $_GET['name'] ?? 'Tes GET'
+function e($value)
+{
+    return htmlspecialchars(
+        $value,
+        ENT_QUOTES,
+        'UTF-8'
     );
-
-
-    $email = trim(
-        $_GET['email'] ?? 'test@kursusku.com'
-    );
-
-
-    $phone = trim(
-        $_GET['phone'] ?? '08123456789'
-    );
-
-
-    $study_program = trim(
-        $_GET['study_program'] ?? 'PTIK'
-    );
-
-
-    $course = trim(
-        $_GET['course'] ?? 'web-dasar'
-    );
-
-
-    $participant_type = trim(
-        $_GET['participant_type'] ?? 'mahasiswa'
-    );
-
-
-    $interests = $_GET['interests'] ?? [];
-
-
-    $note = trim(
-        $_GET['note'] ?? 'Percobaan GET'
-    );
-
-
-    $source = trim(
-        $_GET['source'] ?? 'week-05'
-    );
-
-
-    /*
-    |--------------------------------------------------------------
-    | Pastikan interests array
-    |--------------------------------------------------------------
-    */
-
-    if (!is_array($interests)) {
-
-        $interests = [$interests];
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------
-    | GET BERHASIL
-    |--------------------------------------------------------------
-    */
-
-    $pageTitle =
-        'GET - Data GET Berhasil Diterima';
-
-    $pageMessage =
-        'Perhatikan address bar browser. Data formulir terlihat setelah tanda ?';
-
-    $alertTitle =
-        'GET - Data GET berhasil diterima';
-
-    $isGet = true;
-
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| METHOD TIDAK DIIZINKAN
-|--------------------------------------------------------------------------
-*/
+$course_names = [
 
-else {
+    'web-dasar' =>
+        'Web Development Dasar',
 
-    http_response_code(405);
+    'ui-ux' =>
+        'UI/UX Design',
 
-    echo 'Method tidak diizinkan.';
-
-    exit;
-
-}
+    'python' =>
+        'Python untuk Pemula'
+];
 
 
-/*
-|--------------------------------------------------------------------------
-| GABUNGKAN MINAT
-|--------------------------------------------------------------------------
-*/
+$course_prices = [
 
-$interestText = !empty($interests)
-    ? implode(', ', $interests)
-    : 'Tidak ada';
+    'web-dasar' =>
+        'Rp149.000',
+
+    'ui-ux' =>
+        'Rp179.000',
+
+    'python' =>
+        'Rp199.000'
+];
+
+
+$course_name =
+    $course_names[$course]
+    ?? $course;
+
+
+$course_price =
+    $course_prices[$course]
+    ?? '-';
 
 ?>
-
 
 <!DOCTYPE html>
 
@@ -444,13 +112,8 @@ $interestText = !empty($interests)
     >
 
     <title>
-
-        <?= htmlspecialchars($pageTitle) ?>
-
-        - KursusKu
-
+        Data Pendaftaran - KursusKu
     </title>
-
 
     <link
         rel="stylesheet"
@@ -462,323 +125,297 @@ $interestText = !empty($interests)
 
 <body>
 
-
 <header class="site-header">
 
-    <div class="container nav-wrap">
+    <div class="container nav-container">
 
         <a
             href="index.php"
             class="brand"
         >
-            KursusKu
+
+            <span class="brand-icon">
+                K
+            </span>
+
+            <span>
+                Kursus<span>Ku</span>
+            </span>
+
         </a>
-
-
-        <nav class="nav-links">
-
-            <a href="index.php">
-                Katalog
-            </a>
-
-            <a href="registration.php">
-                Daftar Kursus
-            </a>
-
-        </nav>
 
     </div>
 
 </header>
 
 
+<main class="result-page">
 
-<main class="container">
+    <div class="container result-container">
+
+        <?php if (!empty($errors)): ?>
+
+            <div class="result-card error-card">
+
+                <span class="result-icon">
+                    !
+                </span>
+
+                <h1>
+                    Data Belum Lengkap
+                </h1>
+
+                <p>
+                    Silakan periksa kembali data
+                    pendaftaran kamu.
+                </p>
+
+                <ul class="error-list">
+
+                    <?php foreach ($errors as $error): ?>
+
+                        <li>
+                            <?= e($error) ?>
+                        </li>
+
+                    <?php endforeach; ?>
+
+                </ul>
+
+                <a
+                    href="registration.php"
+                    class="btn btn-yellow"
+                >
+                    ← Kembali ke Form
+                </a>
+
+            </div>
+
+        <?php else: ?>
+
+            <div class="success-header">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <span>
+                    GET — DATA BERHASIL DITERIMA
+                </span>
+
+                <h1>
+                    Pendaftaran berhasil!
+                </h1>
+
+                <p>
+                    Data kamu berhasil dikirim menggunakan
+                    metode GET.
+                </p>
+
+            </div>
 
 
-    <!-- =====================================================
-         JUDUL
-         ===================================================== -->
-
-    <section class="page-intro">
-
-        <p class="eyebrow">
-
-            <?php
-
-            if ($isGet) {
-
-                echo 'Testing GET';
-
-            } else {
-
-                echo 'Pendaftaran';
-
-            }
-
-            ?>
-
-        </p>
+            <div class="result-grid">
 
 
-        <h1>
+                <div class="result-card">
 
-            <?= htmlspecialchars($pageTitle) ?>
+                    <div class="result-card-heading">
 
-        </h1>
+                        <span>
+                            DATA PESERTA
+                        </span>
 
+                        <h2>
+                            Informasi Pendaftar
+                        </h2>
 
-        <p>
-
-            <?= htmlspecialchars($pageMessage) ?>
-
-        </p>
-
-    </section>
-
+                    </div>
 
 
-    <!-- =====================================================
-         PESAN BERHASIL
-         ===================================================== -->
+                    <div class="data-list">
 
-    <div class="alert alert-success">
+                        <div class="data-item">
 
-        <strong>
+                            <span>
+                                Nama Lengkap
+                            </span>
 
-            <?= htmlspecialchars($alertTitle) ?>
+                            <strong>
+                                <?= e($name) ?>
+                            </strong>
 
-        </strong>
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong>
+                                <?= e($email) ?>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Nomor HP
+                            </span>
+
+                            <strong>
+                                <?= e($phone) ?>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Program Studi
+                            </span>
+
+                            <strong>
+                                <?= e($study_program) ?>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Tipe Peserta
+                            </span>
+
+                            <strong>
+                                <?= e($participant_type) ?>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="data-item">
+
+                            <span>
+                                Minat
+                            </span>
+
+                            <strong>
+
+                                <?php if (!empty($interests)): ?>
+
+                                    <?= e(
+                                        implode(
+                                            ', ',
+                                            $interests
+                                        )
+                                    ) ?>
+
+                                <?php else: ?>
+
+                                    Tidak ada
+
+                                <?php endif; ?>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="result-card selected-course">
+
+                    <span class="result-card-label">
+                        KURSUS PILIHAN
+                    </span>
+
+                    <h2>
+                        <?= e($course_name) ?>
+                    </h2>
+
+                    <div class="selected-price">
+                        <?= e($course_price) ?>
+                    </div>
+
+                    <p>
+                        Kursus pilihan berhasil
+                        ditambahkan ke pendaftaran.
+                    </p>
+
+                    <div class="source-box">
+
+                        <span>
+                            Source
+                        </span>
+
+                        <strong>
+                            <?= e($source ?: '-') ?>
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="result-card note-card">
+
+                <span>
+                    CATATAN
+                </span>
+
+                <p>
+                    <?= $note !== ''
+                        ? e($note)
+                        : 'Tidak ada catatan.' ?>
+                </p>
+
+            </div>
+
+
+            <div class="result-actions">
+
+                <a
+                    href="registration.php"
+                    class="btn btn-yellow"
+                >
+                    ← Daftar Lagi
+                </a>
+
+                <a
+                    href="index.php"
+                    class="btn btn-light"
+                >
+                    Kembali ke Beranda
+                </a>
+
+            </div>
+
+        <?php endif; ?>
 
     </div>
-
-
-
-    <!-- =====================================================
-         DATA PENDAFTARAN
-         ===================================================== -->
-
-    <section class="summary-card">
-
-        <h2>
-            Data yang Diterima
-        </h2>
-
-
-        <div class="summary">
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Nama Lengkap
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($name) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Email
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($email) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Nomor HP
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($phone) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Program Studi
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($study_program) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Kursus
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($course) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Jenis Peserta
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($participant_type) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Minat Belajar
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($interestText) ?>
-                </span>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <strong>
-                    Source
-                </strong>
-
-                <span>
-                    <?= htmlspecialchars($source) ?>
-                </span>
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- CATATAN -->
-
-        <div class="note">
-
-            <strong>
-                Catatan
-            </strong>
-
-            <p>
-
-                <?= nl2br(
-                    htmlspecialchars(
-                        $note !== ''
-                            ? $note
-                            : '-'
-                    )
-                ) ?>
-
-            </p>
-
-        </div>
-
-
-
-        <!-- TOMBOL -->
-
-        <div class="form-actions">
-
-            <a
-                href="registration.php"
-                class="btn-primary"
-            >
-                ← Daftar Lagi
-            </a>
-
-
-            <a
-                href="index.php"
-                class="btn-secondary"
-            >
-                Kembali ke Beranda
-            </a>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         INFORMASI KHUSUS GET
-         ===================================================== -->
-
-    <?php if ($isGet): ?>
-
-        <section class="summary-card">
-
-            <h2>
-                GET - Data GET Berhasil Diterima
-            </h2>
-
-
-            <p>
-                Perhatikan address bar browser.
-            </p>
-
-
-            <p>
-                Data formulir terlihat setelah tanda
-                <strong>?</strong>
-            </p>
-
-
-            <p>
-                Contoh URL:
-            </p>
-
-
-            <code>
-                process-registration.php?method=get&name=Tes+GET&email=test%40kursusku.com
-            </code>
-
-        </section>
-
-    <?php endif; ?>
-
 
 </main>
 
 
-
 <footer>
 
-    <div class="container">
-
-        <p>
-            &copy; 2026 KursusKu
-        </p>
-
+    <div class="copyright">
+        © 2026 KursusKu
     </div>
 
 </footer>
-
 
 </body>
 

@@ -10,9 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Daftar Kursus - KursusKu
-    </title>
+    <title>Daftar Kursus - KursusKu</title>
 
     <link
         rel="stylesheet"
@@ -24,27 +22,28 @@
 
 <body>
 
-
 <header class="site-header">
 
-    <div class="container nav-wrap">
+    <div class="container nav-container">
 
-        <a
-            href="index.php"
-            class="brand"
-        >
-            KursusKu
+        <a href="index.php" class="brand">
+
+            <span class="brand-icon">K</span>
+
+            <span>
+                Kursus<span>Ku</span>
+            </span>
+
         </a>
-
 
         <nav class="nav-links">
 
             <a href="index.php">
-                Katalog
+                Beranda
             </a>
 
-            <a href="registration.php">
-                Daftar Kursus
+            <a href="index.php#kursus">
+                Katalog
             </a>
 
         </nav>
@@ -54,72 +53,102 @@
 </header>
 
 
+<main>
 
-<main class="container">
+<section class="registration-page">
 
-
-    <!-- =====================================================
-         JUDUL
-         ===================================================== -->
-
-    <section class="page-intro">
-
-        <p class="eyebrow">
-            Pendaftaran Kursus
-        </p>
-
-        <h1>
-            Daftar Kursus
-        </h1>
-
-        <p>
-            Isi data berikut untuk melakukan pendaftaran.
-        </p>
-
-    </section>
+    <div class="container registration-grid">
 
 
+        <!-- INFORMASI -->
 
-    <!-- =====================================================
-         FORM
-         ===================================================== -->
+        <div class="registration-info">
 
-    <section class="form-card">
+            <span class="page-label">
+                PENDAFTARAN KURSUS
+            </span>
 
+            <h1>
+                Mulai perjalanan
+                <span>belajarmu.</span>
+            </h1>
 
-        <!-- =================================================
-             INI ADALAH FORM POST
-             =================================================
-
-             Perhatikan:
-
-             method="POST"
-
-             Jadi Daftar Sekarang menggunakan POST.
-
-             ================================================= -->
-
-        <form
-            action="process-registration.php"
-            method="POST"
-            class="registration-form"
-        >
+            <p>
+                Isi data di bawah untuk mendaftarkan diri
+                ke kursus pilihanmu.
+            </p>
 
 
-            <!-- SOURCE -->
+            <div class="registration-benefits">
 
-            <input
-                type="hidden"
-                name="source"
-                value="week-05"
+                <div>
+                    <span>✓</span>
+                    <div>
+                        <strong>Materi Terstruktur</strong>
+                        <small>
+                            Materi dibuat bertahap dan mudah diikuti.
+                        </small>
+                    </div>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <div>
+                        <strong>Belajar Fleksibel</strong>
+                        <small>
+                            Belajar kapan saja sesuai waktumu.
+                        </small>
+                    </div>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <div>
+                        <strong>Project Praktik</strong>
+                        <small>
+                            Belajar melalui latihan dan project.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <div class="form-card">
+
+            <div class="form-card-header">
+
+                <span>
+                    FORM PENDAFTARAN
+                </span>
+
+                <h2>
+                    Data Peserta
+                </h2>
+
+                <p>
+                    Lengkapi data berikut dengan benar.
+                </p>
+
+            </div>
+
+
+            <form
+                action="process-registration.php"
+                method="GET"
+                class="registration-form"
             >
 
+                <input
+                    type="hidden"
+                    name="source"
+                    value="week-05"
+                >
 
-
-            <div class="form-grid">
-
-
-                <!-- NAMA -->
 
                 <div class="form-group">
 
@@ -138,48 +167,43 @@
                 </div>
 
 
+                <div class="form-grid-2">
 
-                <!-- EMAIL -->
+                    <div class="form-group">
 
-                <div class="form-group">
+                        <label for="email">
+                            Email
+                        </label>
 
-                    <label for="email">
-                        Email
-                    </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="nama@email.com"
+                            required
+                        >
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="contoh@email.com"
-                        required
-                    >
-
-                </div>
-
+                    </div>
 
 
-                <!-- NOMOR HP -->
+                    <div class="form-group">
 
-                <div class="form-group">
+                        <label for="phone">
+                            Nomor HP
+                        </label>
 
-                    <label for="phone">
-                        Nomor HP
-                    </label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="08xxxxxxxxxx"
+                            required
+                        >
 
-                    <input
-                        type="text"
-                        id="phone"
-                        name="phone"
-                        placeholder="08xxxxxxxxxx"
-                        required
-                    >
+                    </div>
 
                 </div>
 
-
-
-                <!-- PROGRAM STUDI -->
 
                 <div class="form-group">
 
@@ -218,13 +242,10 @@
                 </div>
 
 
-
-                <!-- KURSUS -->
-
                 <div class="form-group">
 
                     <label for="course">
-                        Kursus
+                        Pilih Kursus
                     </label>
 
                     <select
@@ -238,19 +259,15 @@
                         </option>
 
                         <option value="web-dasar">
-                            Web Dasar
-                        </option>
-
-                        <option value="php">
-                            PHP
-                        </option>
-
-                        <option value="mysql">
-                            MySQL
+                            Web Development Dasar — Rp149.000
                         </option>
 
                         <option value="ui-ux">
-                            UI/UX Design
+                            UI/UX Design — Rp179.000
+                        </option>
+
+                        <option value="python">
+                            Python untuk Pemula — Rp199.000
                         </option>
 
                     </select>
@@ -258,18 +275,13 @@
                 </div>
 
 
+                <fieldset>
 
-                <!-- JENIS PESERTA -->
+                    <legend>
+                        Tipe Peserta
+                    </legend>
 
-                <div class="form-group">
-
-                    <label>
-                        Jenis Peserta
-                    </label>
-
-
-                    <div class="choice-group">
-
+                    <div class="choice-row">
 
                         <label class="choice">
 
@@ -292,21 +304,6 @@
                             <input
                                 type="radio"
                                 name="participant_type"
-                                value="pelajar"
-                            >
-
-                            <span>
-                                Pelajar
-                            </span>
-
-                        </label>
-
-
-                        <label class="choice">
-
-                            <input
-                                type="radio"
-                                name="participant_type"
                                 value="umum"
                             >
 
@@ -316,24 +313,18 @@
 
                         </label>
 
-
                     </div>
 
-                </div>
+                </fieldset>
 
 
+                <fieldset>
 
-                <!-- MINAT BELAJAR -->
-
-                <div class="form-group">
-
-                    <label>
+                    <legend>
                         Minat Belajar
-                    </label>
+                    </legend>
 
-
-                    <div class="choice-group">
-
+                    <div class="choice-grid">
 
                         <label class="choice">
 
@@ -370,25 +361,36 @@
                             <input
                                 type="checkbox"
                                 name="interests[]"
-                                value="database"
+                                value="programming"
                             >
 
                             <span>
-                                Database
+                                Programming
                             </span>
 
                         </label>
 
 
+                        <label class="choice">
+
+                            <input
+                                type="checkbox"
+                                name="interests[]"
+                                value="digital"
+                            >
+
+                            <span>
+                                Digital
+                            </span>
+
+                        </label>
+
                     </div>
 
-                </div>
+                </fieldset>
 
 
-
-                <!-- CATATAN -->
-
-                <div class="form-group full-width">
+                <div class="form-group">
 
                     <label for="note">
                         Catatan
@@ -397,88 +399,55 @@
                     <textarea
                         id="note"
                         name="note"
-                        rows="5"
+                        rows="4"
                         placeholder="Tulis catatan jika ada..."
                     ></textarea>
 
                 </div>
 
 
-            </div>
+                <div class="form-actions">
 
+    <a
+        href="index.php"
+        class="btn btn-light"
+    >
+        ← Kembali
+    </a>
 
+    <a
+        href="process-registration.php?source=week-05&name=Tes+GET&email=test%40kursusku.com&phone=08123456789&study_program=PTIK&course=web-dasar&participant_type=mahasiswa&interests%5B%5D=web-development&note=Percobaan+GET"
+        class="btn btn-dark"
+    >
+        ↗ Tes GET
+    </a>
 
-            <!-- =================================================
-                 TOMBOL
-                 ================================================= -->
+    <button
+        type="submit"
+        class="btn btn-yellow"
+    >
+        ✓ Daftar Sekarang
+    </button>
 
-            <div class="form-actions">
+</div>
+            </form>
 
+        </div>
 
-                <!-- KEMBALI -->
+    </div>
 
-                <a
-                    href="index.php"
-                    class="btn-secondary"
-                >
-                    Kembali
-                </a>
-
-
-
-                <!-- POST -->
-
-                <button
-                    type="submit"
-                    class="btn-primary"
-                >
-                    ✓ Daftar Sekarang
-                </button>
-
-
-
-                <!-- =================================================
-                     GET
-                     =================================================
-
-                     INI TOMBOL GET.
-
-                     Klik tombol ini untuk menguji GET.
-
-                     ================================================= -->
-
-                <a
-                    href="process-registration.php?method=get&name=Tes+GET&email=test%40kursusku.com&phone=08123456789&study_program=PTIK&course=web-dasar&participant_type=mahasiswa&interests%5B%5D=web-development&note=Percobaan+GET&source=week-05"
-                    class="btn-secondary"
-                >
-                    ↗ Tes GET
-                </a>
-
-
-            </div>
-
-
-        </form>
-
-    </section>
-
+</section>
 
 </main>
 
 
-
 <footer>
 
-    <div class="container">
-
-        <p>
-            &copy; 2026 KursusKu
-        </p>
-
+    <div class="copyright">
+        © 2026 KursusKu
     </div>
 
 </footer>
-
 
 </body>
 
