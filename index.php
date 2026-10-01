@@ -186,7 +186,7 @@
         <div class="hero-image">
 
             <img
-                src="evidence/week-02/hero.jpg"
+                src="assets/images/hero-.jpg"
                 alt="Ilustrasi belajar online"
             >
 
@@ -401,7 +401,7 @@
                 <div class="course-image">
 
                     <img
-                        src="evidence/week-02/web%20development.svg"
+                        src="assets/images/web development.svg"
                         alt="Web Development"
                     >
 
@@ -486,7 +486,7 @@
                 <div class="course-image">
 
                     <img
-                        src="evidence/week-02/ui-ux.svg"
+                        src="assets/images/ui-ux.svg"
                         alt="UI UX Design"
                     >
 
@@ -571,7 +571,7 @@
                 <div class="course-image">
 
                     <img
-                        src="evidence/week-02/python.svg"
+                        src="assets/images/python.svg"
                         alt="Python untuk Pemula"
                     >
 
@@ -765,7 +765,7 @@
             >
 
                 <source
-                    src="evidence/week-02/video.mp4"
+                    src="assets/video/video.mp4"
                     type="video/mp4"
                 >
 
