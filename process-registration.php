@@ -1,100 +1,234 @@
 <?php
 
-$name = trim($_GET['name'] ?? '');
-$email = trim($_GET['email'] ?? '');
-$phone = trim($_GET['phone'] ?? '');
+session_start();
 
-$study_program = trim($_GET['study_program'] ?? '');
-$course = trim($_GET['course'] ?? '');
+require __DIR__ . '/data.php';
+require __DIR__ . '/helpers.php';
 
-$participant_type = trim(
-    $_GET['participant_type'] ?? ''
-);
+/*
+|--------------------------------------------------------------------------
+| PROSES HANYA MELALUI POST
+|--------------------------------------------------------------------------
+*/
 
-$interests = $_GET['interests'] ?? [];
-
-$note = trim($_GET['note'] ?? '');
-
-$source = trim($_GET['source'] ?? '');
-
-
-if (!is_array($interests)) {
-    $interests = [$interests];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: registration.php');
+    exit;
 }
 
+
+
+/*
+|--------------------------------------------------------------------------
+| AMBIL DATA FORM
+|--------------------------------------------------------------------------
+*/
+
+$name = trim($_POST['name'] ?? '');
+$email = trim($_POST['email'] ?? '');
+
+$courseCode = $_POST['course_code'] ?? '';
+$participantType = $_POST['participant_type'] ?? '';
+$learningMode = $_POST['learning_mode'] ?? '';
+
+$packageCount = (int) ($_POST['package_count'] ?? 1);
+
+$notes = trim($_POST['notes'] ?? '');
+
+$interests = $_POST['interests'] ?? [];
+
+
+/*
+|--------------------------------------------------------------------------
+| PASTIKAN INTERESTS BERUPA ARRAY
+|--------------------------------------------------------------------------
+*/
+
+if (!is_array($interests)) {
+    $interests = [];
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FILTER CHECKBOX YANG VALID
+|--------------------------------------------------------------------------
+*/
+
+$allowedInterestKeys = array_keys($interestOptions);
+
+$interests = array_values(
+    array_intersect(
+        $interests,
+        $allowedInterestKeys
+    )
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| VALIDASI
+|--------------------------------------------------------------------------
+*/
 
 $errors = [];
 
 
 if ($name === '') {
-    $errors[] = 'Nama lengkap wajib diisi.';
-}
-
-if ($email === '') {
-    $errors[] = 'Email wajib diisi.';
-}
-
-if ($phone === '') {
-    $errors[] = 'Nomor HP wajib diisi.';
-}
-
-if ($study_program === '') {
-    $errors[] = 'Program studi wajib dipilih.';
-}
-
-if ($course === '') {
-    $errors[] = 'Kursus wajib dipilih.';
-}
-
-if ($participant_type === '') {
-    $errors[] = 'Tipe peserta wajib dipilih.';
+    $errors[] = 'Nama wajib diisi.';
 }
 
 
-function e($value)
-{
-    return htmlspecialchars(
-        $value,
-        ENT_QUOTES,
-        'UTF-8'
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = 'Format email tidak valid.';
+}
+
+
+$course = findCourse(
+    $courses,
+    $courseCode
+);
+
+
+if ($course === null) {
+    $errors[] = 'Kursus tidak ditemukan.';
+}
+
+
+if (!in_array(
+    $participantType,
+    ['mahasiswa', 'guru', 'umum'],
+    true
+)) {
+    $errors[] = 'Tipe peserta tidak valid.';
+}
+
+
+if (!in_array(
+    $learningMode,
+    ['offline', 'online', 'hybrid'],
+    true
+)) {
+    $errors[] = 'Metode belajar tidak valid.';
+}
+
+
+if (!in_array(
+    $packageCount,
+    [1, 2, 3],
+    true
+)) {
+    $errors[] = 'Jumlah paket tidak valid.';
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PERHITUNGAN BIAYA
+|--------------------------------------------------------------------------
+*/
+
+$discountPercent = 0;
+$grossTotal = 0;
+$discountAmount = 0;
+$finalTotal = 0;
+
+
+if ($course !== null) {
+
+    $discountPercent = getDiscountPercent(
+        $participantType
     );
+
+    $grossTotal =
+        $course['fee'] * $packageCount;
+
+    $discountAmount =
+        intdiv(
+            $grossTotal * $discountPercent,
+            100
+        );
+
+    $finalTotal =
+        $grossTotal - $discountAmount;
 }
 
 
-$course_names = [
+/*
+|--------------------------------------------------------------------------
+| LABEL METODE BELAJAR
+|--------------------------------------------------------------------------
+*/
 
-    'web-dasar' =>
-        'Web Development Dasar',
+if ($learningMode === 'offline') {
 
-    'ui-ux' =>
-        'UI/UX Design',
+    $learningModeLabel = 'Tatap Muka';
 
-    'python' =>
-        'Python untuk Pemula'
-];
+} elseif ($learningMode === 'online') {
 
+    $learningModeLabel = 'Online';
 
-$course_prices = [
+} elseif ($learningMode === 'hybrid') {
 
-    'web-dasar' =>
-        'Rp149.000',
+    $learningModeLabel = 'Hybrid';
 
-    'ui-ux' =>
-        'Rp179.000',
+} else {
 
-    'python' =>
-        'Rp199.000'
-];
+    $learningModeLabel = 'Tidak diketahui';
 
-
-$course_name =
-    $course_names[$course]
-    ?? $course;
+}
 
 
-$course_price =
-    $course_prices[$course]
-    ?? '-';
+/*
+|--------------------------------------------------------------------------
+| LABEL TIPE PESERTA
+|--------------------------------------------------------------------------
+*/
+
+if ($participantType === 'mahasiswa') {
+
+    $participantLabel = 'Mahasiswa';
+
+} elseif ($participantType === 'guru') {
+
+    $participantLabel = 'Guru';
+
+} elseif ($participantType === 'umum') {
+
+    $participantLabel = 'Umum';
+
+} else {
+
+    $participantLabel = '-';
+
+}
+/* 
+|--------------------------------------------------------------------------
+| SIMPAN PENDAFTARAN KE HISTORY
+|--------------------------------------------------------------------------
+*/
+
+if (empty($errors) && $course !== null) {
+
+    // Pastikan history sudah tersedia
+    if (!isset($_SESSION['registration_history'])) {
+        $_SESSION['history'] = [];
+    }
+
+    // Data pendaftaran yang akan disimpan
+    $_SESSION['history'][] = [
+        'name' => $name,
+        'email' => $email,
+        'course' => $course['name'],
+        'course_code' => $courseCode,
+        'participant_type' => $participantLabel,
+        'learning_mode' => $learningModeLabel,
+        'package_count' => $packageCount,
+        'total' => $finalTotal,
+        'notes' => $notes,
+        'registered_at' => date('d-m-Y H:i')
+    ];
+}
 
 ?>
 
@@ -112,22 +246,892 @@ $course_price =
     >
 
     <title>
-        Data Pendaftaran - KursusKu
+        Hasil Pendaftaran - KursusKu
     </title>
 
-    <link
-        rel="stylesheet"
-        href="assets/css/style.css"
-    >
+
+    <!--
+    ============================================================
+    CSS KHUSUS HALAMAN PROCESS
+    Tidak menggunakan warna hijau dari style.css lama.
+    ============================================================
+    -->
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f7f8;
+
+            color: #111827;
+
+        }
+
+
+        /*
+        ========================================================
+        HEADER
+        ========================================================
+        */
+
+        .site-header {
+
+            background: #111111;
+
+            border-bottom:
+                5px solid #f5c400;
+
+            padding:
+                22px 0;
+
+        }
+
+
+        .nav-container {
+
+            max-width: 1180px;
+
+            margin: 0 auto;
+
+            padding:
+                0 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+        }
+
+
+        .brand-icon {
+
+            width: 50px;
+
+            height: 50px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #ffd32a;
+
+            color: #111111;
+
+            border-radius: 15px;
+
+            font-size: 28px;
+
+            font-weight: 900;
+
+        }
+
+
+        .brand span span {
+
+            color: #ffd32a;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 35px;
+
+        }
+
+
+        .nav-links a {
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            font-size: 16px;
+
+        }
+
+
+        .nav-links a:hover {
+
+            color: #ffd32a;
+
+        }
+
+
+        /*
+        ========================================================
+        HALAMAN
+        ========================================================
+        */
+
+        .result-page {
+
+            max-width: 1180px;
+
+            margin:
+                45px auto 70px;
+
+            padding:
+                0 25px;
+
+        }
+
+
+        /*
+        ========================================================
+        GRID UTAMA
+        ========================================================
+        */
+
+        .result-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.35fr
+                0.85fr;
+
+            gap: 0;
+
+            background: white;
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        /*
+        ========================================================
+        BAGIAN KIRI
+        ========================================================
+        */
+
+        .result-left {
+
+            padding: 45px;
+
+            background: #ffffff;
+
+        }
+
+
+        .page-label {
+
+            display: inline-block;
+
+            margin-bottom: 15px;
+
+            color: #d6a900;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        .result-left h1 {
+
+            margin:
+                0 0 35px;
+
+            font-size: 38px;
+
+            line-height: 1.15;
+
+            color: #111827;
+
+        }
+
+
+        /*
+        ========================================================
+        DATA PESERTA
+        ========================================================
+        */
+
+        .section-title {
+
+            margin:
+                0 0 20px;
+
+            font-size: 22px;
+
+            color: #111827;
+
+        }
+
+
+        .data-list {
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .data-row {
+
+            display: grid;
+
+            grid-template-columns:
+                180px 1fr;
+
+            padding:
+                17px 20px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            gap: 20px;
+
+        }
+
+
+        .data-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .data-label {
+
+            color: #64748b;
+
+            font-size: 15px;
+
+        }
+
+
+        .data-value {
+
+            color: #111827;
+
+            font-weight: 700;
+
+            text-align: right;
+
+        }
+
+
+        /*
+        ========================================================
+        RINCIAN BIAYA
+        ========================================================
+        */
+
+        .price-box {
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .price-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding:
+                17px 20px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            font-size: 15px;
+
+        }
+
+
+        .price-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .price-discount {
+
+            color: #c0392b;
+
+        }
+
+
+        /*
+        ========================================================
+        TOTAL AKHIR - KUNING
+        ========================================================
+        */
+
+        .price-total {
+
+            background: #fff3b0;
+
+            color: #111827;
+
+            font-weight: 900;
+
+            font-size: 18px;
+
+        }
+
+
+        .price-total span:last-child {
+
+            color: #111111;
+
+        }
+
+
+        /*
+        ========================================================
+        MINAT
+        ========================================================
+        */
+
+        .interest-section {
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .interest-list {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            padding: 0;
+
+            margin: 0;
+
+            list-style: none;
+
+        }
+
+
+        .interest-item {
+
+            display: inline-block;
+
+            background: #fff3b0;
+
+            border:
+                1px solid #f5c400;
+
+            color: #5f4a00;
+
+            padding:
+                9px 15px;
+
+            border-radius: 20px;
+
+            font-weight: 700;
+
+            font-size: 14px;
+
+        }
+
+
+        /*
+        ========================================================
+        FASILITAS
+        ========================================================
+        */
+
+        .facility-section {
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .facility-list {
+
+            margin: 0;
+
+            padding-left: 22px;
+
+        }
+
+
+        .facility-list li {
+
+            margin-bottom: 10px;
+
+            color: #334155;
+
+        }
+
+
+        .facility-list li::marker {
+
+            color: #d6a900;
+
+        }
+
+
+        /*
+        ========================================================
+        CATATAN
+        ========================================================
+        */
+
+        .notes-section {
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .notes-box {
+
+            background: #f8fafc;
+
+            border-left:
+                5px solid #f5c400;
+
+            padding:
+                18px 20px;
+
+            border-radius: 10px;
+
+            color: #334155;
+
+            line-height: 1.6;
+
+        }
+
+
+        /*
+        ========================================================
+        BAGIAN KANAN - KUNING
+        ========================================================
+        */
+
+        .result-right {
+
+            background: #ffd42a;
+
+            padding: 45px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+            min-height: 650px;
+
+        }
+
+
+        .course-label {
+
+            color: #735900;
+
+            font-size: 13px;
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .course-name {
+
+            margin:
+                0 0 25px;
+
+            font-size: 40px;
+
+            line-height: 1.1;
+
+            color: #111111;
+
+        }
+
+
+        .course-price {
+
+            margin:
+                0 0 30px;
+
+            font-size: 34px;
+
+            font-weight: 900;
+
+            color: #111111;
+
+        }
+
+
+        .course-description {
+
+            color: #3f3500;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /*
+        ========================================================
+        KOTAK INFO KUNING
+        ========================================================
+        */
+
+        .course-info-box {
+
+            margin-top: 35px;
+
+            padding: 20px;
+
+            background:
+                rgba(255,255,255,0.45);
+
+            border-radius: 15px;
+
+        }
+
+
+        .course-info-box p {
+
+            margin:
+                0 0 10px;
+
+            color: #3f3500;
+
+        }
+
+
+        .course-info-box p:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .course-info-box strong {
+
+            color: #111111;
+
+        }
+
+
+        /*
+        ========================================================
+        BUTTON
+        ========================================================
+        */
+
+        .result-actions {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 40px;
+
+        }
+
+
+        .btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 48px;
+
+            padding:
+                0 22px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+            font-size: 14px;
+
+        }
+
+
+        .btn-primary {
+
+            background: #111111;
+
+            color: #ffd42a;
+
+            border:
+                2px solid #111111;
+
+        }
+
+
+        .btn-secondary {
+
+            background: white;
+
+            color: #111111;
+
+            border:
+                2px solid #111111;
+
+        }
+
+
+        .btn-primary:hover {
+
+            background: #333333;
+
+        }
+
+
+        .btn-secondary:hover {
+
+            background: #fff3b0;
+
+        }
+
+
+        /*
+        ========================================================
+        PESAN ERROR
+        ========================================================
+        */
+
+        .error-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.08);
+
+        }
+
+
+        .error-card h1 {
+
+            margin-top: 0;
+
+        }
+
+
+        .error-card ul {
+
+            line-height: 1.8;
+
+        }
+
+
+        /*
+        ========================================================
+        RESPONSIVE
+        ========================================================
+        */
+
+        @media (max-width: 850px) {
+
+            .result-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .result-right {
+
+                min-height: auto;
+
+            }
+
+
+            .data-row {
+
+                grid-template-columns: 1fr;
+
+                gap: 7px;
+
+            }
+
+
+            .data-value {
+
+                text-align: left;
+
+            }
+
+
+            .result-left,
+            .result-right {
+
+                padding: 30px;
+
+            }
+
+
+            .course-name {
+
+                font-size: 32px;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .nav-container {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+
+            .nav-links {
+
+                gap: 20px;
+
+            }
+
+
+            .result-page {
+
+                margin-top: 25px;
+
+            }
+
+
+            .result-left,
+            .result-right {
+
+                padding: 25px;
+
+            }
+
+
+            .result-left h1 {
+
+                font-size: 30px;
+
+            }
+
+
+            .result-actions {
+
+                flex-direction: column;
+
+            }
+
+
+            .btn {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
 
 <body>
 
+
+<!-- ==========================================================
+     HEADER
+========================================================== -->
+
 <header class="site-header">
 
-    <div class="container nav-container">
+    <div class="nav-container">
 
         <a
             href="index.php"
@@ -144,224 +1148,443 @@ $course_price =
 
         </a>
 
+
+        <nav class="nav-links">
+
+            <a href="index.php">
+                Beranda
+            </a>
+
+            <a href="index.php#kursus">
+                Katalog
+            </a>
+
+        </nav>
+
     </div>
 
 </header>
 
 
+<!-- ==========================================================
+     HASIL PENDAFTARAN
+========================================================== -->
+
 <main class="result-page">
 
-    <div class="container result-container">
 
-        <?php if (!empty($errors)): ?>
+<?php if (!empty($errors)): ?>
 
-            <div class="result-card error-card">
 
-                <span class="result-icon">
-                    !
-                </span>
+    <!-- ======================================================
+         ERROR
+    ======================================================= -->
 
-                <h1>
-                    Data Belum Lengkap
-                </h1>
+    <div class="error-card">
 
-                <p>
-                    Silakan periksa kembali data
-                    pendaftaran kamu.
-                </p>
+        <span class="page-label">
+            PENDAFTARAN
+        </span>
 
-                <ul class="error-list">
+        <h1>
+            Data belum dapat diproses
+        </h1>
 
-                    <?php foreach ($errors as $error): ?>
+        <p>
+            Silakan periksa kembali data berikut:
+        </p>
+
+        <ul>
+
+            <?php foreach ($errors as $error): ?>
+
+                <li>
+                    <?= e($error) ?>
+                </li>
+
+            <?php endforeach; ?>
+
+        </ul>
+
+
+        <div class="result-actions">
+
+            <a
+                href="registration.php"
+                class="btn btn-primary"
+            >
+                Kembali ke Form
+            </a>
+
+            <a
+                href="index.php"
+                class="btn btn-secondary"
+            >
+                Beranda
+            </a>
+
+        </div>
+
+    </div>
+
+
+<?php else: ?>
+
+
+    <!-- ======================================================
+         GRID HASIL
+    ======================================================= -->
+
+    <div class="result-grid">
+
+
+        <!-- ==================================================
+             BAGIAN KIRI
+        =================================================== -->
+
+        <section class="result-left">
+
+
+            <span class="page-label">
+                MILESTONE 6 · RINGKASAN
+            </span>
+
+
+            <h1>
+                Pendaftaran Berhasil Diproses
+            </h1>
+
+
+            <!-- ==============================================
+                 DATA PESERTA
+            =============================================== -->
+
+            <h2 class="section-title">
+                Data Peserta
+            </h2>
+
+
+            <div class="data-list">
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Nama
+                    </span>
+
+                    <span class="data-value">
+                        <?= e($name) ?>
+                    </span>
+
+                </div>
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Email
+                    </span>
+
+                    <span class="data-value">
+                        <?= e($email) ?>
+                    </span>
+
+                </div>
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Tipe Peserta
+                    </span>
+
+                    <span class="data-value">
+                        <?= e($participantLabel) ?>
+                    </span>
+
+                </div>
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Metode Belajar
+                    </span>
+
+                    <span class="data-value">
+                        <?= e($learningModeLabel) ?>
+                    </span>
+
+                </div>
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Jumlah Paket
+                    </span>
+
+                    <span class="data-value">
+                        <?= $packageCount ?> paket
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==============================================
+                 RINCIAN BIAYA
+            =============================================== -->
+
+            <h2 class="section-title">
+                Rincian Biaya
+            </h2>
+
+
+            <div class="price-box">
+
+
+                <div class="price-row">
+
+                    <span>
+                        Biaya satuan
+                    </span>
+
+                    <span>
+                        <?= formatRupiah($course['fee']) ?>
+                    </span>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <span>
+                        <?= formatRupiah($grossTotal) ?>
+                    </span>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Diskon <?= $discountPercent ?>%
+                    </span>
+
+                    <span class="price-discount">
+
+                        -<?= formatRupiah($discountAmount) ?>
+
+                    </span>
+
+                </div>
+
+
+                <div class="price-row price-total">
+
+                    <span>
+                        TOTAL AKHIR
+                    </span>
+
+                    <span>
+                        <?= formatRupiah($finalTotal) ?>
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==============================================
+                 MINAT
+            =============================================== -->
+
+            <div class="interest-section">
+
+                <h2 class="section-title">
+                    Minat Belajar
+                </h2>
+
+
+                <ul class="interest-list">
+
+                    <?php if ($interests === []): ?>
+
+                        <li class="interest-item">
+                            Belum memilih minat
+                        </li>
+
+                    <?php else: ?>
+
+                        <?php foreach ($interests as $interest): ?>
+
+                            <li class="interest-item">
+
+                                <?= e(
+                                    $interestOptions[$interest]
+                                    ?? $interest
+                                ) ?>
+
+                            </li>
+
+                        <?php endforeach; ?>
+
+                    <?php endif; ?>
+
+                </ul>
+
+            </div>
+
+
+            <!-- ==============================================
+                 FASILITAS
+            =============================================== -->
+
+            <div class="facility-section">
+
+                <h2 class="section-title">
+                    Fasilitas
+                </h2>
+
+
+                <ul class="facility-list">
+
+                    <?php foreach ($facilities as $facility): ?>
 
                         <li>
-                            <?= e($error) ?>
+                            <?= e($facility) ?>
                         </li>
 
                     <?php endforeach; ?>
 
                 </ul>
 
-                <a
-                    href="registration.php"
-                    class="btn btn-yellow"
-                >
-                    ← Kembali ke Form
-                </a>
+            </div>
+
+
+            <!-- ==============================================
+                 CATATAN
+            =============================================== -->
+
+            <div class="notes-section">
+
+                <h2 class="section-title">
+                    Catatan
+                </h2>
+
+
+                <div class="notes-box">
+
+                    <?php if ($notes !== ''): ?>
+
+                        <?= nl2br(e($notes)) ?>
+
+                    <?php else: ?>
+
+                        Tidak ada catatan.
+
+                    <?php endif; ?>
+
+                </div>
 
             </div>
 
-        <?php else: ?>
 
-            <div class="success-header">
+        </section>
 
-                <div class="success-icon">
-                    ✓
+
+        <!-- ==================================================
+             BAGIAN KANAN KUNING
+        =================================================== -->
+
+        <aside class="result-right">
+
+
+            <div>
+
+
+                <div class="course-label">
+                    KURSUS PILIHAN
                 </div>
 
-                <span>
-                    GET — DATA BERHASIL DITERIMA
-                </span>
 
-                <h1>
-                    Pendaftaran berhasil!
-                </h1>
+                <h2 class="course-name">
 
-                <p>
-                    Data kamu berhasil dikirim menggunakan
-                    metode GET.
+                    <?= e($course['name']) ?>
+
+                </h2>
+
+
+                <div class="course-price">
+
+                    <?= formatRupiah($course['fee']) ?>
+
+                </div>
+
+
+                <p class="course-description">
+
+                    Kursus pilihan berhasil
+                    ditambahkan ke pendaftaran.
+
                 </p>
 
-            </div>
 
+                <div class="course-info-box">
 
-            <div class="result-grid">
-
-
-                <div class="result-card">
-
-                    <div class="result-card-heading">
-
-                        <span>
-                            DATA PESERTA
-                        </span>
-
-                        <h2>
-                            Informasi Pendaftar
-                        </h2>
-
-                    </div>
-
-
-                    <div class="data-list">
-
-                        <div class="data-item">
-
-                            <span>
-                                Nama Lengkap
-                            </span>
-
-                            <strong>
-                                <?= e($name) ?>
-                            </strong>
-
-                        </div>
-
-
-                        <div class="data-item">
-
-                            <span>
-                                Email
-                            </span>
-
-                            <strong>
-                                <?= e($email) ?>
-                            </strong>
-
-                        </div>
-
-
-                        <div class="data-item">
-
-                            <span>
-                                Nomor HP
-                            </span>
-
-                            <strong>
-                                <?= e($phone) ?>
-                            </strong>
-
-                        </div>
-
-
-                        <div class="data-item">
-
-                            <span>
-                                Program Studi
-                            </span>
-
-                            <strong>
-                                <?= e($study_program) ?>
-                            </strong>
-
-                        </div>
-
-
-                        <div class="data-item">
-
-                            <span>
-                                Tipe Peserta
-                            </span>
-
-                            <strong>
-                                <?= e($participant_type) ?>
-                            </strong>
-
-                        </div>
-
-
-                        <div class="data-item">
-
-                            <span>
-                                Minat
-                            </span>
-
-                            <strong>
-
-                                <?php if (!empty($interests)): ?>
-
-                                    <?= e(
-                                        implode(
-                                            ', ',
-                                            $interests
-                                        )
-                                    ) ?>
-
-                                <?php else: ?>
-
-                                    Tidak ada
-
-                                <?php endif; ?>
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="result-card selected-course">
-
-                    <span class="result-card-label">
-                        KURSUS PILIHAN
-                    </span>
-
-                    <h2>
-                        <?= e($course_name) ?>
-                    </h2>
-
-                    <div class="selected-price">
-                        <?= e($course_price) ?>
-                    </div>
 
                     <p>
-                        Kursus pilihan berhasil
-                        ditambahkan ke pendaftaran.
-                    </p>
-
-                    <div class="source-box">
-
-                        <span>
-                            Source
-                        </span>
 
                         <strong>
-                            <?= e($source ?: '-') ?>
+                            Peserta:
                         </strong>
 
-                    </div>
+                        <?= e($participantLabel) ?>
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Metode:
+                        </strong>
+
+                        <?= e($learningModeLabel) ?>
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Paket:
+                        </strong>
+
+                        <?= $packageCount ?> paket
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Total:
+                        </strong>
+
+                        <?= formatRupiah($finalTotal) ?>
+
+                    </p>
+
 
                 </div>
 
@@ -369,53 +1592,51 @@ $course_price =
             </div>
 
 
-            <div class="result-card note-card">
-
-                <span>
-                    CATATAN
-                </span>
-
-                <p>
-                    <?= $note !== ''
-                        ? e($note)
-                        : 'Tidak ada catatan.' ?>
-                </p>
-
-            </div>
-
+            <!-- ==============================================
+                 BUTTON
+            =============================================== -->
 
             <div class="result-actions">
 
+
                 <a
                     href="registration.php"
-                    class="btn btn-yellow"
+                    class="btn btn-primary"
                 >
-                    ← Daftar Lagi
+                    Daftar Lagi
                 </a>
+
+
+                <a
+                    href="history.php"
+                    class="btn btn-secondary"
+                >
+                    Lihat History Dummy
+                </a>
+
 
                 <a
                     href="index.php"
-                    class="btn btn-light"
+                    class="btn btn-secondary"
                 >
-                    Kembali ke Beranda
+                    Beranda
                 </a>
+
 
             </div>
 
-        <?php endif; ?>
+
+        </aside>
+
 
     </div>
+
+
+<?php endif; ?>
+
 
 </main>
 
-
-<footer>
-
-    <div class="copyright">
-        © 2026 KursusKu
-    </div>
-
-</footer>
 
 </body>
 

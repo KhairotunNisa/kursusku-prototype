@@ -1,0 +1,188 @@
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/helpers.php';
+
+$tests = [
+    [
+        'no' => 1,
+        'scenario' => 'Mahasiswa, Web Dasar, 1 paket',
+        'actual' => 'Rp 240.000',
+        'expected' => 'Rp 240.000',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 2,
+        'scenario' => 'Guru, PHP Dasar, 1 paket',
+        'actual' => 'Rp 340.000',
+        'expected' => 'Rp 340.000',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 3,
+        'scenario' => 'Umum, Laravel Dasar, 1 paket',
+        'actual' => 'Rp 500.000',
+        'expected' => 'Rp 500.000',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 4,
+        'scenario' => 'Mahasiswa, Web Dasar, 2 paket',
+        'actual' => 'Rp 480.000',
+        'expected' => 'Rp 480.000',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 5,
+        'scenario' => 'Nama kosong',
+        'actual' => 'Nama wajib diisi.',
+        'expected' => 'Nama wajib diisi.',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 6,
+        'scenario' => 'Email tidak valid',
+        'actual' => 'Email tidak valid.',
+        'expected' => 'Email tidak valid.',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 7,
+        'scenario' => 'Minat kosong',
+        'actual' => 'Belum memilih minat.',
+        'expected' => 'Belum memilih minat.',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 8,
+        'scenario' => '3 minat',
+        'actual' => 'Frontend, Backend, Database',
+        'expected' => 'Frontend, Backend, Database',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 9,
+        'scenario' => 'Metode offline',
+        'actual' => 'Tatap Muka',
+        'expected' => 'Tatap Muka',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 10,
+        'scenario' => 'Metode hybrid',
+        'actual' => 'Hybrid',
+        'expected' => 'Hybrid',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 11,
+        'scenario' => 'GET process-registration.php',
+        'actual' => 'Redirect ke registration.php',
+        'expected' => 'Redirect ke registration.php',
+        'status' => 'PASS',
+    ],
+    [
+        'no' => 12,
+        'scenario' => 'Tambah fasilitas',
+        'actual' => 'Dirender otomatis dengan foreach',
+        'expected' => 'Dirender otomatis dengan foreach',
+        'status' => 'PASS',
+    ],
+];
+
+?>
+
+<!doctype html>
+<html lang="id">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Test Matrix - KursusKu</title>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+</head>
+
+<body class="test-matrix-page">
+
+<main class="test-matrix-card">
+
+    <span class="test-matrix-eyebrow">
+        EVIDENCE WEEK 06
+    </span>
+
+    <h1>
+        Test Matrix Pertemuan 6
+    </h1>
+
+    <div class="test-matrix-table-wrapper">
+
+        <table class="test-matrix-table">
+
+            <thead>
+
+                <tr>
+                    <th>NO</th>
+                    <th>SCENARIO</th>
+                    <th>ACTUAL</th>
+                    <th>EXPECTED</th>
+                    <th>STATUS</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <?php foreach ($tests as $test): ?>
+
+                    <tr>
+
+                        <td>
+                            <?= e((string) $test['no']) ?>
+                        </td>
+
+                        <td>
+                            <?= e($test['scenario']) ?>
+                        </td>
+
+                        <td>
+                            <?= e($test['actual']) ?>
+                        </td>
+
+                        <td>
+                            <?= e($test['expected']) ?>
+                        </td>
+
+                        <td>
+
+                            <span class="test-status">
+                                <?= e($test['status']) ?>
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+</body>
+</html>

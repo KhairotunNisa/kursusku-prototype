@@ -54,12 +54,22 @@
                 Kursus
             </a>
 
-            <a href="#tentang">
-                Tentang
+            <a href="#cara-daftar">
+                 Cara Daftar
             </a>
 
-            <a href="#video">
-                Video
+            <a href="#keunggulan">
+                Keunggulan 
+           
+            <a href="#kontak">
+                Kontak
+            </a>
+
+            <a href="#process.php">Media</a>
+            <a href="process.php">From P5</a>
+            <a href="register.php">Daftar P6</a>
+            <a href="history.php">
+                History
             </a>
 
             <a
@@ -186,7 +196,7 @@
         <div class="hero-image">
 
             <img
-                src="assets/images/hero-.jpg"
+                src="assets/images/hero-kursus.jpg"
                 alt="Ilustrasi belajar online"
             >
 
@@ -652,8 +662,109 @@
 
 </section>
 
+</section>
 
 
+<section class="how-to-register" id="cara-daftar">
+
+    <div class="how-to-header">
+
+        <div>
+            <span class="section-label">CARA DAFTAR</span>
+
+            <h2>
+                Mulai belajar dengan
+                <br>
+                4 langkah mudah.
+            </h2>
+        </div>
+
+        <p>
+            Ikuti langkah sederhana berikut untuk
+            mendaftar kursus di KursusKu.
+        </p>
+
+    </div>
+
+
+    <div class="steps-grid">
+
+        <article class="step-card">
+
+            <div class="step-number">01</div>
+
+            <div class="step-content">
+                <h3>Pilih Kursus</h3>
+
+                <p>
+                    Pilih kursus yang sesuai dengan
+                    minat dan kebutuhan belajar kamu.
+                </p>
+            </div>
+
+        </article>
+
+
+        <article class="step-card">
+
+            <div class="step-number">02</div>
+
+            <div class="step-content">
+                <h3>Isi Formulir</h3>
+
+                <p>
+                    Isi nama, email, kursus, tipe peserta,
+                    dan data pendaftaran lainnya.
+                </p>
+            </div>
+
+        </article>
+
+
+        <article class="step-card">
+
+            <div class="step-number">03</div>
+
+            <div class="step-content">
+                <h3>Kirim Pendaftaran</h3>
+
+                <p>
+                    Periksa kembali data yang sudah diisi,
+                    lalu kirim formulir pendaftaran.
+                </p>
+            </div>
+
+        </article>
+
+
+        <article class="step-card">
+
+            <div class="step-number">04</div>
+
+            <div class="step-content">
+                <h3>Lihat Hasil</h3>
+
+                <p>
+                    Lihat ringkasan pendaftaran dan
+                    perhitungan biaya kursus.
+                </p>
+            </div>
+
+        </article>
+
+    </div>
+
+
+    <div class="how-to-action">
+
+        <a href="registration.php" class="how-to-button">
+            Mulai Daftar
+            <span>→</span>
+        </a>
+
+    </div>
+
+</section>
 <!-- =====================================================
      6. PROMO
      ===================================================== -->
@@ -688,6 +799,171 @@
             >
                 Daftar Sekarang
             </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     KEUNGGULAN KURSUSKU
+     ===================================================== -->
+
+<section
+    class="keunggulan-section"
+    id="keunggulan"
+>
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span>
+                    KEUNGGULAN KURSUSKU
+                </span>
+
+                <h2>
+                    Kenapa belajar
+                    <br>
+                    di KursusKu?
+                </h2>
+
+            </div>
+
+            <p>
+                Belajar skill digital dengan materi
+                praktis dan mudah dipahami.
+            </p>
+
+        </div>
+
+
+        <div class="keunggulan-grid">
+
+
+            <!-- KEUNGGULAN 1 -->
+
+            <div class="keunggulan-card">
+
+                <div class="keunggulan-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Materi Praktis
+                </h3>
+
+                <p>
+                    Materi dibuat sederhana dengan
+                    contoh yang mudah dipahami.
+                </p>
+
+            </div>
+
+
+            <!-- KEUNGGULAN 2 -->
+
+            <div class="keunggulan-card">
+
+                <div class="keunggulan-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Belajar Fleksibel
+                </h3>
+
+                <p>
+                    Tersedia pilihan belajar online,
+                    offline, dan hybrid.
+                </p>
+
+            </div>
+
+
+            <!-- KEUNGGULAN 3 -->
+
+            <div class="keunggulan-card">
+
+                <div class="keunggulan-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Harga Terjangkau
+                </h3>
+
+                <p>
+                    Pilihan kursus dengan biaya
+                    yang terjangkau.
+                </p>
+
+            </div>
+
+
+            <!-- KEUNGGULAN 4 -->
+
+            <div class="keunggulan-card">
+
+                <div class="keunggulan-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Sertifikat
+                </h3>
+
+                <p>
+                    Dapatkan sertifikat setelah
+                    menyelesaikan kursus.
+                </p>
+
+            </div>
+
+
+            <!-- KEUNGGULAN 5 -->
+
+            <div class="keunggulan-card">
+
+                <div class="keunggulan-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Forum Diskusi
+                </h3>
+
+                <p>
+                    Berdiskusi dengan peserta lain
+                    selama proses belajar.
+                </p>
+
+            </div>
+
+
+            <!-- KEUNGGULAN 6 -->
+
+            <div class="keunggulan-card">
+
+                <div class="keunggulan-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Cocok untuk Pemula
+                </h3>
+
+                <p>
+                    Materi disusun bertahap sehingga
+                    mudah diikuti oleh pemula.
+                </p>
+
+            </div>
+
 
         </div>
 
@@ -765,7 +1041,7 @@
             >
 
                 <source
-                    src="assets/video/video.mp4"
+                    src="assets/video/intro-kursus.mp4"
                     type="video/mp4"
                 >
 
@@ -780,8 +1056,6 @@
     </div>
 
 </section>
-
-
 
 <!-- =====================================================
      8. TENTANG KURSUSKU
@@ -834,6 +1108,61 @@
 
 </main>
 
+<!-- =====================================================
+     9. KONTAK WEEK 02
+     ===================================================== -->
+
+<section class="contact-section" id="kontak"> </section>
+
+    <div class="container">
+
+        <div class="contact-box">
+
+            <div class="contact-content">
+
+                <span class="contact-label">
+                    KONTAK
+                </span>
+
+                <h2>
+                    Kontak
+                </h2>
+
+            </div>
+
+            <div class="contact-info">
+
+                <div class="contact-item">
+
+                    <strong>
+                        Email :
+                    </strong>
+
+                    <span>
+                        kursusku@example.test
+                    </span>
+
+                </div>
+
+                <div class="contact-item">
+
+                    <strong>
+                        Alamat :
+                    </strong>
+
+                    <span>
+                        Laboratorium Komputer - data latihan
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 
 <!-- =====================================================
@@ -881,7 +1210,7 @@
                 Video
             </a>
 
-            <a href="registration.php">
+            <a href="registration.php"> 
                 Daftar
             </a>
 
