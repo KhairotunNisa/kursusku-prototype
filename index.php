@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -370,378 +372,227 @@
 
 </section>
 
-
-
-<!-- =====================================================
-     5. KATALOG KURSUS
-     ===================================================== -->
-
-<section
-    class="courses-section"
-    id="katalog"
->
-
+<!-- 5. KATALOG KURSUS -->
+<section class="courses-section" id="katalog">
     <div class="container">
 
-
         <div class="section-heading">
-
             <div>
-
-                <span>
-                    KATALOG KURSUS
-                </span>
-
-                <h2>
-                    Kursus pilihan
-                </h2>
-
+                <span>KATALOG KURSUS</span>
+                <h2>Kursus pilihan</h2>
             </div>
 
-
             <p>
-                Materi praktis dengan harga yang
-                terjangkau untuk mulai belajar.
+                Materi praktis dengan harga terjangkau
+                untuk mulai belajar keterampilan digital.
             </p>
-
         </div>
-
-
 
         <div class="course-grid">
 
-
-            <!-- =================================================
-                 KURSUS 1 - WEB DEVELOPMENT
-                 ================================================= -->
-
-            <div class="course-card">
-
+            <!-- KURSUS 1 -->
+            <article class="course-card">
                 <div class="course-image">
-
-                    <img
-                        src="assets/images/web development.svg"
-                        alt="Web Development"
-                    >
-
-                    <span class="course-badge">
-                        POPULER
-                    </span>
-
+                    <img src="assets/images/web development.svg"
+                         alt="Web Development">
+                    <span class="course-badge">POPULER</span>
                 </div>
-
 
                 <div class="course-content">
-
-                    <span class="course-category">
-                        PROGRAMMING
-                    </span>
-
-
-                    <h3>
-                        Web Development Dasar
-                    </h3>
-
-
-                    <p>
-                        Belajar HTML, CSS, dan dasar
-                        JavaScript untuk membuat website.
-                    </p>
-
+                    <span class="course-category">PROGRAMMING</span>
+                    <h3>Web Development Dasar</h3>
+                    <p>Belajar HTML, CSS, dan JavaScript untuk membuat website.</p>
 
                     <div class="course-meta">
-
-                        <span>
-                            ★ 4.9
-                        </span>
-
-                        <span>
-                            12 Materi
-                        </span>
-
-                        <span>
-                            4 Jam
-                        </span>
-
+                        <span>★ 4.9</span>
+                        <span>12 Materi</span>
+                        <span>4 Jam</span>
                     </div>
-
 
                     <div class="course-bottom">
-
                         <div class="price">
-
-                            <del>
-                                Rp199.000
-                            </del>
-
-                            <strong>
-                                Rp149.000
-                            </strong>
-
+                            <del>Rp199.000</del>
+                            <strong>Rp149.000</strong>
                         </div>
-
-
-                        <a
-                            href="registration.php"
-                            class="course-button"
-                        >
-                            Daftar
-                        </a>
-
+                        <a href="registration.php" class="course-button">Daftar</a>
                     </div>
-
                 </div>
+            </article>
 
-            </div>
-
-
-
-            <!-- =================================================
-                 KURSUS 2 - UI/UX DESIGN
-                 ================================================= -->
-
-            <div class="course-card">
-
+            <!-- KURSUS 2 -->
+            <article class="course-card">
                 <div class="course-image">
-
-                    <img
-                        src="assets/images/ui-ux.svg"
-                        alt="UI UX Design"
-                    >
-
-                    <span class="course-badge">
-                        TERBARU
-                    </span>
-
+                    <img src="assets/images/ui-ux.svg" alt="UI UX Design">
+                    <span class="course-badge">TERBARU</span>
                 </div>
-
 
                 <div class="course-content">
-
-                    <span class="course-category">
-                        DESIGN
-                    </span>
-
-
-                    <h3>
-                        UI/UX Design
-                    </h3>
-
-
-                    <p>
-                        Belajar membuat desain aplikasi
-                        dan website yang menarik.
-                    </p>
-
+                    <span class="course-category">DESIGN</span>
+                    <h3>UI/UX Design</h3>
+                    <p>Belajar membuat desain aplikasi dan website yang menarik.</p>
 
                     <div class="course-meta">
-
-                        <span>
-                            ★ 4.8
-                        </span>
-
-                        <span>
-                            15 Materi
-                        </span>
-
-                        <span>
-                            5 Jam
-                        </span>
-
+                        <span>★ 4.8</span>
+                        <span>15 Materi</span>
+                        <span>5 Jam</span>
                     </div>
-
 
                     <div class="course-bottom">
-
                         <div class="price">
-
-                            <del>
-                                Rp229.000
-                            </del>
-
-                            <strong>
-                                Rp179.000
-                            </strong>
-
+                            <del>Rp229.000</del>
+                            <strong>Rp179.000</strong>
                         </div>
-
-
-                        <a
-                            href="registration.php"
-                            class="course-button"
-                        >
-                            Daftar
-                        </a>
-
+                        <a href="registration.php" class="course-button">Daftar</a>
                     </div>
-
                 </div>
+            </article>
 
-            </div>
-
-
-
-            <!-- =================================================
-                 KURSUS 3 - PYTHON
-                 ================================================= -->
-
-            <div class="course-card">
-
+            <!-- KURSUS 3 -->
+            <article class="course-card">
                 <div class="course-image">
-
-                    <img
-                        src="assets/images/python.svg"
-                        alt="Python untuk Pemula"
-                    >
-
-                    <span class="course-badge">
-                        FAVORIT
-                    </span>
-
+                    <img src="assets/images/python.svg" alt="Python untuk Pemula">
+                    <span class="course-badge">FAVORIT</span>
                 </div>
-
 
                 <div class="course-content">
-
-                    <span class="course-category">
-                        PROGRAMMING
-                    </span>
-
-
-                    <h3>
-                        Python untuk Pemula
-                    </h3>
-
-
-                    <p>
-                        Mulai belajar Python dari dasar
-                        sampai membuat project sederhana.
-                    </p>
-
+                    <span class="course-category">PROGRAMMING</span>
+                    <h3>Python untuk Pemula</h3>
+                    <p>Mulai belajar Python dari dasar sampai membuat proyek sederhana.</p>
 
                     <div class="course-meta">
-
-                        <span>
-                            ★ 4.9
-                        </span>
-
-                        <span>
-                            18 Materi
-                        </span>
-
-                        <span>
-                            6 Jam
-                        </span>
-
+                        <span>★ 4.9</span>
+                        <span>18 Materi</span>
+                        <span>6 Jam</span>
                     </div>
-
 
                     <div class="course-bottom">
-
                         <div class="price">
-
-                            <del>
-                                Rp249.000
-                            </del>
-
-                            <strong>
-                                Rp199.000
-                            </strong>
-
+                            <del>Rp249.000</del>
+                            <strong>Rp199.000</strong>
                         </div>
-
-
-                        <a
-                            href="registration.php"
-                            class="course-button"
-                        >
-                            Daftar
-                        </a>
-
+                        <a href="registration.php" class="course-button">Daftar</a>
                     </div>
+                </div>
+            </article>
 
+            <!-- KURSUS 4 -->
+            <article class="course-card">
+                <div class="course-image">
+                    <img src="assets/images/php.svg" alt="PHP Dasar">
+                    <span class="course-badge">PEMULA</span>
                 </div>
 
-            </div>
+                <div class="course-content">
+                    <span class="course-category">PROGRAMMING</span>
+                    <h3>PHP Dasar</h3>
+                    <p>Pelajari dasar PHP untuk membuat website dinamis dan interaktif.</p>
 
-        </div>
+                    <div class="course-meta">
+                        <span>★ 4.8</span>
+                        <span>14 Materi</span>
+                        <span>4 Jam</span>
+                    </div>
 
-    </div>
+                    <div class="course-bottom">
+                        <div class="price">
+                            <del>Rp199.000</del>
+                            <strong>Rp149.000</strong>
+                        </div>
+                        <a href="registration.php" class="course-button">Daftar</a>
+                    </div>
+                </div>
+            </article>
 
-</section>
-
-<!-- =================================================
-     KURSUS 4 - PHP DASAR
-     ================================================= -->
-
-<div class="course-card">
-
+            
+<!-- KURSUS 5: LARAVEL FUNDAMENTAL -->
+<article class="course-card">
     <div class="course-image">
-
-        <img
-            src="assets/images/php.svg"
-            alt="PHP Dasar"
-        >
-
-        <span class="course-badge">
-            PEMULA
-        </span>
-
+        <img src="assets/images/laravel.svg"
+             alt="Laravel Fundamental">
+        <span class="course-badge">PRAKTIK</span>
     </div>
 
     <div class="course-content">
-
-        <span class="course-category">
-            PROGRAMMING
-        </span>
-
-        <h3>
-            PHP Dasar
-        </h3>
+        <span class="course-category">WEB DEVELOPMENT</span>
+        <h3>Laravel Fundamental</h3>
 
         <p>
-            Pelajari dasar PHP untuk membuat website
-            dinamis dan interaktif.
+            Kenali framework Laravel untuk membangun
+            aplikasi web secara terstruktur.
         </p>
 
         <div class="course-meta">
-
             <span>★ 4.8</span>
-            <span>14 Materi</span>
-            <span>4 Jam</span>
-
+            <span>16 Materi</span>
+            <span>6 Jam</span>
         </div>
 
         <div class="course-bottom">
-
             <div class="price">
-
-                <del>
-                    Rp199.000
-                </del>
-
-                <strong>
-                    Rp149.000
-                </strong>
-
+                <del>Rp299.000</del>
+                <strong>Rp249.000</strong>
             </div>
 
-            <a
-                href="registration.php"
-                class="course-button"
-            >
-                Daftar
-            </a>
-
+            <span class="course-full">Penuh</span>
         </div>
+    </div>
+</article>
 
+
+                    <div class="course-meta">
+                        <span>★ 4.8</span>
+                        <span>16 Materi</span>
+                        <span>6 Jam</span>
+                    </div>
+
+                    <div class="course-bottom">
+                        <div class="price">
+                            <del>Rp299.000</del>
+                            <strong>Rp249.000</strong>
+                        </div>
+                        <a href="registration.php" class="course-button">Daftar</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- KURSUS 6 -->
+<article class="course-card">
+    <div class="course-image">
+        <img src="assets/images/mysql.svg" alt="MySQL Dasar">
+        <span class="course-badge">DASAR</span>
     </div>
 
-</div>
+    <div class="course-content">
+        <span class="course-category">DATABASE</span>
+        <h3>MySQL Dasar</h3>
+        <p>Belajar mengelola database dan menjalankan query SQL.</p>
+
+        <div class="course-meta">
+            <span>★ 4.9</span>
+            <span>12 Materi</span>
+            <span>4 Jam</span>
+        </div>
+
+        <div class="course-bottom">
+            <div class="price">
+                <del>Rp225.000</del>
+                <strong>Rp175.000</strong>
+            </div>
+            <a href="registration.php" class="course-button">Daftar</a>
+        </div>
+    </div>
+</article>
+</section>
+
+
+
 
 
 </section>
 
+
+            
+</section>
 
 <section class="how-to-register" id="cara-daftar">
 

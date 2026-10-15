@@ -441,201 +441,6 @@ textarea {
     font-size: 12px;
 }
 
-
-/* =========================
-   KATALOG
-========================= */
-
-.courses-section {
-    padding: 90px 0;
-
-    background: var(--light);
-}
-
-.course-grid {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 24px;
-}
-
-.course-card {
-    overflow: hidden;
-
-    background: white;
-
-    border: 1px solid var(--border);
-
-    border-radius: 22px;
-
-    transition: 0.25s ease;
-}
-
-.course-card:hover {
-    transform: translateY(-7px);
-
-    box-shadow:
-        0 25px 60px rgba(0, 0, 0, 0.10);
-}
-
-.course-image {
-    position: relative;
-
-    aspect-ratio: 16 / 10;
-
-    overflow: hidden;
-
-    background: var(--yellow);
-}
-
-.course-image img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-}
-
-.course-badge {
-    position: absolute;
-
-    top: 15px;
-    left: 15px;
-
-    padding: 7px 10px;
-
-    background: var(--yellow);
-
-    border-radius: 7px;
-
-    font-size: 9px;
-    font-weight: 900;
-}
-
-.course-content {
-    padding: 23px;
-}
-
-.course-category {
-    color: var(--yellow-dark);
-
-    font-size: 10px;
-    font-weight: 900;
-
-    letter-spacing: 1px;
-}
-
-.course-content h3 {
-    margin: 7px 0;
-
-    font-size: 22px;
-
-    line-height: 1.15;
-}
-
-.course-content > p {
-    min-height: 52px;
-
-    color: var(--gray);
-
-    font-size: 13px;
-}
-
-.course-meta {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 10px;
-
-    margin: 18px 0;
-
-    padding: 13px 0;
-
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-
-    color: var(--gray);
-
-    font-size: 11px;
-}
-
-.course-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 15px;
-}
-
-.price del {
-    display: block;
-
-    color: #999;
-
-    font-size: 11px;
-}
-
-.price strong {
-    display: block;
-
-    font-size: 20px;
-}
-
-.course-button {
-    padding: 11px 16px;
-
-    background: var(--black);
-    color: white;
-
-    border-radius: 10px;
-
-    font-size: 12px;
-    font-weight: 800;
-}
-
-
-/* =========================
-   PROMO
-========================= */
-
-.promo-section {
-    padding: 50px 0;
-}
-
-.promo-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 30px;
-
-    padding: 45px;
-
-    background: var(--yellow);
-
-    border-radius: 28px;
-}
-
-.promo-label {
-    font-size: 10px;
-    font-weight: 900;
-
-    letter-spacing: 1.5px;
-}
-
-.promo-box h2 {
-    margin: 7px 0;
-
-    font-size: clamp(30px, 4vw, 44px);
-
-    line-height: 1;
-}
-
-.promo-box p {
-    color: #514700;
-}
-
-
 /* =========================
    VIDEO
 ========================= */
@@ -4171,4 +3976,548 @@ body {
     .form-actions .btn {
         width: 100%;
     }
+}
+
+/* ========================================
+   KATALOG DATA-DRIVEN KURSUSKU
+======================================== */
+
+.catalog-table-section {
+    padding: 80px 5%;
+    background: #f7f7f5;
+    color: #171717;
+}
+
+.catalog-table-section .container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+.catalog-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.catalog-heading span {
+    color: #c79b00;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.catalog-heading h2 {
+    margin: 10px 0;
+    font-size: clamp(26px, 3vw, 38px);
+}
+
+.catalog-heading p {
+    color: #6b7280;
+    margin-bottom: 0;
+}
+
+.catalog-count {
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+.catalog-count strong {
+    color: #bd9200;
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.catalog-table-wrap {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 12px 35px #0000000b;
+}
+
+.catalog-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.catalog-table thead {
+    background: #151515;
+    color: #fff;
+}
+
+.catalog-table th {
+    padding: 19px 20px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.catalog-table td {
+    padding: 20px;
+    border-bottom: 1px solid #ededed;
+    font-size: 14px;
+}
+
+.catalog-table tbody tr:hover {
+    background: #fffbed;
+}
+
+.catalog-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.catalog-code {
+    font-weight: 800;
+    color: #262626;
+}
+
+.catalog-fee {
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.catalog-remaining {
+    display: inline-block;
+    min-width: 36px;
+    padding: 7px 10px;
+    text-align: center;
+    border-radius: 8px;
+    background: #fff3bd;
+    color: #5b4500;
+    font-weight: 800;
+}
+
+.catalog-status {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.catalog-status.available {
+    background: #e4f7ec;
+    color: #187448;
+}
+
+.catalog-status.full {
+    background: #fde8ec;
+    color: #b4233c;
+}
+
+.catalog-register {
+    display: inline-block;
+    padding: 10px 17px;
+    background: #ffd42a;
+    color: #151515;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+    transition: .2s;
+}
+
+.catalog-register:hover {
+    background: #151515;
+    color: #ffd42a;
+}
+
+.catalog-register.disabled {
+    background: #ececec;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.catalog-note {
+    margin-top: 18px;
+    color: #737373;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .catalog-table-section {
+        padding: 50px 16px;
+    }
+
+    .catalog-heading {
+        align-items: start;
+        flex-direction: column;
+    }
+}
+
+/* =========================================
+   KATALOG KURSUS KURSUSKU
+   ========================================= */
+
+.courses-section {
+    width: 100%;
+    padding: 70px 0;
+    background-color: #f5f5f2;
+    box-sizing: border-box;
+    scroll-margin-top: 100px;
+}
+
+.courses-section,
+.courses-section * {
+    box-sizing: border-box;
+}
+
+.courses-section > .container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Judul katalog */
+
+.courses-section .section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 35px;
+}
+
+.courses-section .section-heading span {
+    color: #b38a00;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.courses-section .section-heading h2 {
+    margin: 10px 0 0;
+    color: #111;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+.courses-section .section-heading p {
+    max-width: 390px;
+    margin: 0;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* Grid kartu */
+
+.courses-section .course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    align-items: stretch;
+}
+
+/* Kartu kursus */
+
+.courses-section .course-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #e8e8e3;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.courses-section .course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Area gambar */
+
+.courses-section .course-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 190px;
+    min-height: 190px;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffda3e, #fff0a8);
+    overflow: hidden;
+}
+
+.courses-section .course-emoji {
+    display: block;
+    font-size: 66px;
+    line-height: 1;
+}
+
+.courses-section .course-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 7px 11px;
+    background: #111;
+    color: #fff;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+/* Warna setiap kartu */
+
+.courses-section .course-design {
+    background: linear-gradient(135deg, #ffe0bd, #fff4e7);
+}
+
+.courses-section .course-python {
+    background: linear-gradient(135deg, #cfe5ff, #edf5ff);
+}
+
+.courses-section .course-php {
+    background: linear-gradient(135deg, #dcdcff, #f0efff);
+}
+
+.courses-section .course-laravel {
+    background: linear-gradient(135deg, #ffd5cc, #fff0eb);
+}
+
+.courses-section .course-database {
+    background: linear-gradient(135deg, #c9efdf, #effbf5);
+}
+
+/* Isi kartu */
+
+.courses-section .course-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    padding: 23px;
+}
+
+.courses-section .course-category {
+    display: block;
+    margin: 0 0 10px;
+    color: #b38a00;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.courses-section .course-content h3 {
+    margin: 0 0 12px;
+    color: #151515;
+    font-size: 20px;
+    font-weight: 750;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+}
+
+.courses-section .course-content p {
+    margin: 0 0 20px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-wrap: break-word;
+}
+
+/* Rating, materi dan durasi */
+
+.courses-section .course-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    margin-top: auto;
+    padding: 16px 0;
+    border-top: 1px solid #ecece8;
+    border-bottom: 1px solid #ecece8;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Harga dan tombol */
+
+.courses-section .course-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.courses-section .price {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.courses-section .price del {
+    color: #999;
+    font-size: 12px;
+}
+
+.courses-section .price strong {
+    color: #111;
+    font-size: 21px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.courses-section .course-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: 46px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 13px;
+    background: #111;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.courses-section .course-button:hover {
+    background: #ffda3e;
+    color: #111;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 900px) {
+    .courses-section .course-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .courses-section .section-heading h2 {
+        font-size: 30px;
+    }
+
+    .courses-section .course-content {
+        padding: 20px;
+    }
+}
+
+/* =========================================
+   HP
+   ========================================= */
+
+@media (max-width: 560px) {
+    .courses-section {
+        padding: 45px 0;
+    }
+
+    .courses-section > .container {
+        width: 90%;
+    }
+
+    .courses-section .section-heading {
+        display: block;
+        margin-bottom: 25px;
+    }
+
+    .courses-section .section-heading h2 {
+        font-size: 28px;
+    }
+
+    .courses-section .section-heading p {
+        margin-top: 14px;
+        font-size: 14px;
+    }
+
+    .courses-section .course-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+    }
+
+    .courses-section .course-image {
+        height: 180px;
+        min-height: 180px;
+    }
+
+    .courses-section .course-content {
+        padding: 20px;
+    }
+
+    .courses-section .course-bottom {
+        gap: 12px;
+    }
+
+    .courses-section .price strong {
+        font-size: 19px;
+    }
+}
+/* Status kursus penuh */
+.courses-section .course-full {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    min-height: 46px;
+    border-radius: 13px;
+    background: #fce7ec;
+    color: #a52a45;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: not-allowed;
+}
+/* Memperbaiki ukuran gambar seluruh kartu katalog */
+.courses-section .course-image {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    min-height: 190px;
+    max-height: 190px;
+    padding: 15px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.courses-section .course-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    margin: 0;
+}
+
+.courses-section .course-image .course-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
 }
