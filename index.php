@@ -59,8 +59,8 @@
 
         <nav class="nav-links">
 
-            <a href="#kursus">
-                Kursus
+            <a href="#katalog">
+                Katalog 
             </a>
 
             <a href="#cara-daftar">
@@ -378,7 +378,7 @@
 
 <section
     class="courses-section"
-    id="kursus"
+    id="katalog"
 >
 
     <div class="container">
