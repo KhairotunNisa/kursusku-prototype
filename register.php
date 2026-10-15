@@ -1,7 +1,89 @@
+```php
 <?php
 
-require __DIR__ . '/data.php';
-require __DIR__ . '/helpers.php';
+declare(strict_types=1);
+
+session_start();
+
+/*
+|--------------------------------------------------------------------------
+| DATA KURSUS
+|--------------------------------------------------------------------------
+*/
+
+$courses = [
+    'WEB' => [
+        'name'  => 'Web Dasar',
+        'price' => 300000
+    ],
+    'PHP' => [
+        'name'  => 'PHP Dasar',
+        'price' => 400000
+    ],
+    'LARAVEL' => [
+        'name'  => 'Laravel Dasar',
+        'price' => 500000
+    ],
+];
+
+/*
+|--------------------------------------------------------------------------
+| DATA MINAT BELAJAR
+|--------------------------------------------------------------------------
+*/
+
+$interestOptions = [
+    'frontend' => 'Frontend',
+    'backend'  => 'Backend',
+    'uiux'     => 'UI/UX Design',
+    'database' => 'Database',
+];
+
+/*
+|--------------------------------------------------------------------------
+| DATA FORM SEBELUMNYA
+|--------------------------------------------------------------------------
+|
+| Data ini digunakan untuk mengisi ulang form apabila
+| process-registration.php mengembalikan pengguna
+| karena validasi gagal.
+|
+*/
+
+$old = $_SESSION['old_registration'] ?? [];
+
+if (!is_array($old)) {
+    $old = [];
+}
+
+unset($_SESSION['old_registration']);
+
+/*
+|--------------------------------------------------------------------------
+| FUNGSI ESCAPE OUTPUT
+|--------------------------------------------------------------------------
+*/
+
+function registerEscape($value): string
+{
+    return htmlspecialchars(
+        (string) $value,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| DATA MINAT YANG DIPILIH
+|--------------------------------------------------------------------------
+*/
+
+$selectedInterests = $old['interests'] ?? [];
+
+if (!is_array($selectedInterests)) {
+    $selectedInterests = [];
+}
 
 ?>
 
@@ -9,7 +91,6 @@ require __DIR__ . '/helpers.php';
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -17,1189 +98,382 @@ require __DIR__ . '/helpers.php';
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Daftar Kursus - KursusKu</title>
+    <title>Form Pendaftaran - KursusKu</title>
 
+    <link rel="stylesheet" href="style.css">
 
     <style>
-
-        /* =====================================================
-           RESET
-           ===================================================== */
+        /* =========================================
+           STYLE TAMBAHAN REGISTER
+        ========================================= */
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
-
-        /* =====================================================
-           BODY
-           ===================================================== */
-
         body {
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            background: #f5f7f8;
-
-            color: #14213d;
-
-            min-height: 100vh;
-
+            margin: 0;
+            background: #fffdf5;
+            color: #171717;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-
-        /* =====================================================
-           HEADER
-           ===================================================== */
-
-        .site-header {
-
-            background: #ffffff;
-
-            border-bottom: 1px solid #e5e5e5;
-
-            padding: 16px 0;
-
-        }
-
-
-        .container {
-
-            width: min(1200px, 92%);
-
-            margin: 0 auto;
-
-        }
-
-
-        .nav-container {
-
+        .topbar {
             display: flex;
-
-            align-items: center;
-
             justify-content: space-between;
-
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            padding: 18px 6%;
+            background: #171717;
+            border-bottom: 5px solid #ffd229;
         }
-
-
-        /* =====================================================
-           LOGO
-           ===================================================== */
 
         .brand {
-
             display: flex;
-
             align-items: center;
-
             gap: 10px;
-
-            text-decoration: none;
-
-            color: #111111;
-
-            font-size: 22px;
-
+            color: #fff;
+            font-size: 21px;
             font-weight: 800;
-
+            text-decoration: none;
         }
 
+        .brand > span:last-child > span {
+            color: #ffd229;
+        }
 
         .brand-icon {
-
-            width: 40px;
-
-            height: 40px;
-
             display: flex;
-
+            width: 38px;
+            height: 38px;
             align-items: center;
-
             justify-content: center;
-
-            background: #ffd21f;
-
-            border-radius: 12px;
-
-            color: #111111;
-
+            background: #ffd229;
+            border-radius: 10px;
+            color: #171717;
             font-weight: 900;
-
         }
-
-
-        .brand-name span {
-
-            color: #e9b800;
-
-        }
-
-
-        /* =====================================================
-           NAVIGASI
-           ===================================================== */
 
         .nav-links {
-
             display: flex;
-
             align-items: center;
-
-            gap: 28px;
-
+            flex-wrap: wrap;
+            gap: 18px;
         }
-
 
         .nav-links a {
-
+            color: #fff;
+            font-size: 13px;
             text-decoration: none;
-
-            color: #17233d;
-
-            font-weight: 700;
-
-            transition: .2s;
-
         }
-
 
         .nav-links a:hover {
-
-            color: #eab900;
-
+            color: #ffd229;
         }
 
-
-        /* =====================================================
-           AREA PENDAFTARAN
-           ===================================================== */
-
-        .registration-section {
-
-            padding: 55px 0 70px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #fffdf5 0%,
-                    #fff9df 100%
-                );
-
+        .page-wrapper {
+            width: 100%;
+            padding: 42px 18px 55px;
         }
 
-
-        .registration-layout {
-
-            display: grid;
-
-            grid-template-columns:
-                0.85fr 1.15fr;
-
-            gap: 45px;
-
-            align-items: start;
-
+        .form-card {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 32px;
+            background: #fff;
+            border: 1px solid #eee5c9;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
         }
 
-
-        /* =====================================================
-           BAGIAN KIRI
-           ===================================================== */
-
-        .registration-info {
-
-            padding-top: 30px;
-
+        .form-heading {
+            margin-bottom: 28px;
         }
 
-
-        .page-label {
-
+        .eyebrow {
             display: inline-block;
-
-            padding: 9px 16px;
-
-            border-radius: 30px;
-
-            background: #fff0a6;
-
-            border: 1px solid #f0c51c;
-
-            color: #765900;
-
-            font-size: 13px;
-
+            padding: 8px 12px;
+            margin-bottom: 13px;
+            background: #fff1a8;
+            border: 1px solid #171717;
+            border-radius: 7px;
+            font-size: 11px;
             font-weight: 800;
-
-            letter-spacing: .5px;
-
-            margin-bottom: 22px;
-
+            letter-spacing: 0.8px;
         }
 
-
-        .registration-info h1 {
-
-            font-size: 46px;
-
-            line-height: 1.08;
-
-            color: #111827;
-
-            margin-bottom: 20px;
-
+        .form-heading h1 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 4vw, 38px);
         }
 
-
-        .registration-info h1 span {
-
-            color: #efb900;
-
-            display: block;
-
-        }
-
-
-        .intro-text {
-
-            color: #667085;
-
-            font-size: 17px;
-
+        .form-heading p {
+            margin: 0;
+            color: #6b6b6b;
+            font-size: 14px;
             line-height: 1.7;
-
-            max-width: 480px;
-
-            margin-bottom: 38px;
-
         }
 
-
-        /* =====================================================
-           BENEFIT
-           ===================================================== */
-
-        .registration-benefits {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 25px;
-
+        .alert-error {
+            padding: 16px 18px;
+            margin-bottom: 24px;
+            background: #fff0ed;
+            border: 1px solid #e9aaa0;
+            border-radius: 10px;
+            color: #8d2920;
+            font-size: 14px;
         }
 
-
-        .benefit-item {
-
-            display: flex;
-
-            align-items: flex-start;
-
-            gap: 16px;
-
+        .alert-error ul {
+            margin-bottom: 0;
+            padding-left: 22px;
+            line-height: 1.8;
         }
 
-
-        .benefit-icon {
-
-            width: 45px;
-
-            height: 45px;
-
-            min-width: 45px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: #ffd21f;
-
-            color: #111111;
-
-            font-size: 20px;
-
-            font-weight: 900;
-
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 21px 18px;
         }
-
-
-        .benefit-item strong {
-
-            display: block;
-
-            color: #111111;
-
-            font-size: 18px;
-
-            margin-bottom: 7px;
-
-        }
-
-
-        .benefit-item small {
-
-            display: block;
-
-            color: #737b88;
-
-            font-size: 15px;
-
-            line-height: 1.5;
-
-        }
-
-
-        /* =====================================================
-           CARD FORM
-           ===================================================== */
-
-        .registration-card {
-
-            background: #ffffff;
-
-            border-radius: 25px;
-
-            padding: 38px;
-
-            box-shadow:
-                0 15px 45px
-                rgba(0, 0, 0, .08);
-
-            border: 1px solid #eee8cf;
-
-        }
-
-
-        .registration-card-header {
-
-            margin-bottom: 30px;
-
-        }
-
-
-        .card-label {
-
-            display: inline-block;
-
-            color: #8a6800;
-
-            font-size: 12px;
-
-            font-weight: 800;
-
-            letter-spacing: .7px;
-
-            margin-bottom: 9px;
-
-        }
-
-
-        .registration-card-header h2 {
-
-            font-size: 30px;
-
-            color: #111827;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .registration-card-header p {
-
-            color: #737b88;
-
-            font-size: 15px;
-
-        }
-
-
-        /* =====================================================
-           FORM
-           ===================================================== */
-
-        .registration-form {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 20px;
-
-        }
-
 
         .form-group {
-
             display: flex;
-
+            min-width: 0;
             flex-direction: column;
-
-            gap: 8px;
-
+            gap: 9px;
         }
 
+        .full-width {
+            grid-column: 1 / -1;
+        }
 
-        .form-group label {
-
-            font-size: 15px;
-
+        .form-group > label,
+        .interests-box legend {
+            font-size: 13px;
             font-weight: 800;
-
-            color: #111827;
-
         }
 
-
-        .form-group input,
+        .form-group input:not([type="checkbox"]),
         .form-group select,
         .form-group textarea {
-
             width: 100%;
-
-            border: 1px solid #d9dce1;
-
-            border-radius: 12px;
-
-            background: #ffffff;
-
-            color: #17233d;
-
-            font-family: inherit;
-
-            font-size: 15px;
-
-            outline: none;
-
-            transition: .2s;
-
+            min-height: 46px;
+            padding: 12px 13px;
+            background: #fff;
+            border: 1px solid #d9d5c8;
+            border-radius: 8px;
+            color: #171717;
+            font: inherit;
+            font-size: 14px;
         }
-
-
-        .form-group input,
-        .form-group select {
-
-            height: 56px;
-
-            padding: 0 16px;
-
-        }
-
 
         .form-group textarea {
-
-            min-height: 145px;
-
-            padding: 15px 16px;
-
+            min-height: 100px;
             resize: vertical;
-
         }
-
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-
-            color: #a1a7b0;
-
-        }
-
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
-
-            border-color: #f0c000;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(255, 210, 31, .16);
-
+            outline: 2px solid #ffd229;
+            border-color: #171717;
         }
 
-
-        /* =====================================================
-           FIELDSET
-           ===================================================== */
-
-        .choice-field {
-
-            border: none;
-
-            padding: 0;
-
-            margin: 0;
-
+        .interests-box {
+            min-width: 0;
+            padding: 17px;
+            border: 1px solid #e1ddcf;
+            border-radius: 10px;
         }
 
-
-        .choice-field legend {
-
-            font-size: 15px;
-
-            font-weight: 800;
-
-            color: #111827;
-
-            margin-bottom: 12px;
-
+        .interests-box legend {
+            padding: 0 7px;
         }
 
+        .field-hint {
+            margin: 0 0 12px;
+            color: #777;
+            font-size: 12px;
+        }
 
-        .choice-row {
+        .checkbox-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
 
+        .checkbox-item {
             display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 10px;
-
-        }
-
-
-        .choice-grid {
-
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 10px;
-
-        }
-
-
-        .choice {
-
-            display: inline-flex;
-
             align-items: center;
-
-            gap: 8px;
-
-            padding: 11px 15px;
-
-            background: #fffaf0;
-
-            border: 1px solid #ead28a;
-
-            border-radius: 30px;
-
+            gap: 9px;
+            padding: 12px;
+            background: #fffdf5;
+            border: 1px solid #eee5c9;
+            border-radius: 8px;
             cursor: pointer;
-
-            color: #493d10;
-
-            font-weight: 700;
-
-            transition: .2s;
-
+            font-size: 13px;
         }
 
-
-        .choice:hover {
-
-            background: #fff0a6;
-
-            border-color: #e9bd00;
-
+        .checkbox-item input {
+            width: 16px;
+            height: 16px;
+            accent-color: #d7a900;
         }
 
-
-        .choice input {
-
-            accent-color: #f2bd00;
-
-        }
-
-
-        /* =====================================================
-           TOMBOL
-           ===================================================== */
-
-        .registration-actions {
-
+        .form-actions {
             display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
             flex-wrap: wrap;
-
-            margin-top: 8px;
-
+            gap: 12px;
+            margin-top: 28px;
         }
 
-
-        .btn-reg {
-
-            min-height: 58px;
-
-            padding: 0 21px;
-
-            border-radius: 13px;
-
+        .btn {
             display: inline-flex;
-
+            min-height: 46px;
             align-items: center;
-
             justify-content: center;
-
-            text-decoration: none;
-
-            font-family: inherit;
-
-            font-size: 15px;
-
-            font-weight: 800;
-
-            cursor: pointer;
-
-            transition: all .2s ease;
-
-            white-space: nowrap;
-
-        }
-
-
-        /* =====================================================
-           TOMBOL KEMBALI
-           ===================================================== */
-
-        .btn-back {
-
-            background: #eeeeee;
-
-            color: #111111;
-
-            border: 2px solid #dddddd;
-
-        }
-
-
-        .btn-back:hover {
-
-            background: #dddddd;
-
-            transform: translateY(-2px);
-
-        }
-
-
-        /* =====================================================
-           TOMBOL PROSES
-           ===================================================== */
-
-        .btn-yellow {
-
-            background: #ffd21f;
-
-            color: #111111;
-
-            border: 2px solid #ffd21f;
-
-        }
-
-
-        .btn-yellow:hover {
-
-            background: #111111;
-
-            color: #ffd21f;
-
-            border-color: #111111;
-
-            transform: translateY(-2px);
-
-        }
-
-
-        /* =====================================================
-           HISTORY DUMMY
-           ===================================================== */
-
-        .btn-history {
-
-            background: #ffffff;
-
-            color: #111111;
-
-            border: 2px solid #111111;
-
-        }
-
-
-        .btn-history:hover {
-
-            background: #ffd21f;
-
-            border-color: #111111;
-
-            transform: translateY(-2px);
-
-        }
-
-
-        /* =====================================================
-           LOOP LAB
-           ===================================================== */
-
-        .btn-loop {
-
-            background: #ffffff;
-
-            color: #111111;
-
-            border: 2px solid #111111;
-
-        }
-
-
-        .btn-loop:hover {
-
-            background: #ffd21f;
-
-            border-color: #111111;
-
-            transform: translateY(-2px);
-
-        }
-
-
-        /* =====================================================
-           FASILITAS
-           ===================================================== */
-
-        .course-facilities {
-
-            background: #111111;
-
-            color: #ffffff;
-
-            border-radius: 18px;
-
-            padding: 27px;
-
-            margin-top: 10px;
-
-        }
-
-
-        .course-facilities h3 {
-
-            color: #ffd21f;
-
-            font-size: 20px;
-
-            margin-bottom: 18px;
-
-        }
-
-
-        .course-facilities ul {
-
-            list-style: none;
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 14px;
-
-        }
-
-
-        .course-facilities li {
-
-            font-size: 15px;
-
-            color: #ffffff;
-
-        }
-
-
-        .course-facilities li::before {
-
-            content: "✓";
-
-            color: #ffd21f;
-
-            font-weight: 900;
-
-            margin-right: 10px;
-
-        }
-
-
-        /* =====================================================
-           FOOTER
-           ===================================================== */
-
-        .registration-footer {
-
-            background: #ffffff;
-
-            padding: 25px;
-
-            text-align: center;
-
-            color: #737b88;
-
+            gap: 10px;
+            padding: 12px 19px;
+            border: 1px solid #171717;
+            border-radius: 9px;
             font-size: 14px;
-
-            border-top: 1px solid #e5e5e5;
-
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s ease;
         }
 
-
-        /* =====================================================
-           RESPONSIVE
-           ===================================================== */
-
-        @media (max-width: 1050px) {
-
-            .registration-layout {
-
-                grid-template-columns: 1fr;
-
-            }
-
-
-            .registration-info {
-
-                padding-top: 0;
-
-            }
-
-
-            .registration-info h1 {
-
-                font-size: 40px;
-
-            }
-
+        .btn:hover {
+            transform: translateY(-2px);
         }
 
+        .btn-primary {
+            background: #ffd229;
+            color: #171717;
+        }
 
-        @media (max-width: 750px) {
+        .btn-secondary {
+            background: #fff;
+            color: #171717;
+        }
 
-            .nav-container {
+        .footer {
+            padding: 23px 15px;
+            border-top: 1px solid #eee5c9;
+            color: #777;
+            text-align: center;
+            font-size: 13px;
+        }
 
-                flex-direction: column;
-
-                gap: 15px;
-
+        @media (max-width: 650px) {
+            .topbar {
+                padding: 16px 5%;
             }
-
 
             .nav-links {
-
-                gap: 20px;
-
+                gap: 12px;
             }
 
-
-            .registration-section {
-
-                padding: 35px 0 50px;
-
+            .nav-links a {
+                font-size: 12px;
             }
 
-
-            .registration-card {
-
-                padding: 25px 20px;
-
-                border-radius: 20px;
-
+            .page-wrapper {
+                padding: 25px 12px 35px;
             }
 
-
-            .registration-info h1 {
-
-                font-size: 35px;
-
+            .form-card {
+                padding: 22px 17px;
             }
 
-
-            .registration-actions {
-
-                display: grid;
-
-                grid-template-columns: 1fr 1fr;
-
-            }
-
-
-            .btn-reg {
-
-                width: 100%;
-
-                padding: 0 10px;
-
-                font-size: 13px;
-
-            }
-
-        }
-
-
-        @media (max-width: 480px) {
-
-            .registration-actions {
-
+            .form-grid {
                 grid-template-columns: 1fr;
-
             }
 
+            .full-width {
+                grid-column: auto;
+            }
 
-            .btn-reg {
+            .checkbox-list {
+                grid-template-columns: 1fr;
+            }
 
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
                 width: 100%;
-
             }
-
-
-            .registration-info h1 {
-
-                font-size: 31px;
-
-            }
-
-
-            .registration-card-header h2 {
-
-                font-size: 25px;
-
-            }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
+    <!-- HEADER -->
 
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
+    <header class="topbar">
 
-<header class="site-header">
-
-    <div class="container nav-container">
-
-
-        <!-- LOGO -->
-
-        <a
-            href="index.php"
-            class="brand"
-        >
-
-            <span class="brand-icon">
-                K
-            </span>
-
-            <span class="brand-name">
-                Kursus<span>Ku</span>
-            </span>
-
+        <a href="index.php" class="brand">
+            <span class="brand-icon">K</span>
+            <span>Kursus<span>Ku</span></span>
         </a>
 
-
-        <!-- NAVIGASI -->
-
         <nav class="nav-links">
-
-            <a href="index.php">
-                Beranda
-            </a>
-
-            <a href="index.php#kursus">
-                Katalog
-            </a>
-
+            <a href="index.php">Beranda</a>
+            <a href="index.php#kursus">Katalog</a>
+            <a href="history.php">History Dummy</a>
+            <a href="loop-lab.php">Loop Lab</a>
         </nav>
 
+    </header>
 
-    </div>
+    <!-- FORM PENDAFTARAN -->
 
-</header>
+    <main class="page-wrapper">
 
+        <section class="form-card">
 
+            <div class="form-heading">
 
-<!-- =====================================================
-     MAIN
-     ===================================================== -->
-
-<main>
-
-
-<section class="registration-section">
-
-
-    <div class="container registration-layout">
-
-
-        <!-- =================================================
-             BAGIAN KIRI
-             ================================================= -->
-
-        <div class="registration-info">
-
-
-            <span class="page-label">
-                PENDAFTARAN KURSUS
-            </span>
-
-
-            <h1>
-
-                Mulai perjalanan
-
-                <span>
-                    belajarmu.
+                <span class="eyebrow">
+                    KURSUS ONLINE &amp; OFFLINE
                 </span>
 
-            </h1>
-
-
-            <p class="intro-text">
-
-                Isi data di bawah untuk mendaftarkan diri
-                ke kursus pilihanmu.
-
-            </p>
-
-
-            <!-- =================================================
-                 BENEFIT
-                 ================================================= -->
-
-            <div class="registration-benefits">
-
-
-                <!-- BENEFIT 1 -->
-
-                <div class="benefit-item">
-
-                    <span class="benefit-icon">
-                        ✓
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Materi Terstruktur
-                        </strong>
-
-                        <small>
-                            Materi dibuat bertahap dan mudah diikuti.
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <!-- BENEFIT 2 -->
-
-                <div class="benefit-item">
-
-                    <span class="benefit-icon">
-                        ✓
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Belajar Fleksibel
-                        </strong>
-
-                        <small>
-                            Belajar kapan saja sesuai waktumu.
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <!-- BENEFIT 3 -->
-
-                <div class="benefit-item">
-
-                    <span class="benefit-icon">
-                        ✓
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Project Praktik
-                        </strong>
-
-                        <small>
-                            Belajar melalui latihan dan project.
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- =================================================
-             BAGIAN KANAN / FORM
-             ================================================= -->
-
-        <div class="registration-card">
-
-
-            <!-- HEADER FORM -->
-
-            <div class="registration-card-header">
-
-                <span class="card-label">
-                    FORM PENDAFTARAN
-                </span>
-
-
-                <h2>
-                    Data Peserta
-                </h2>
-
+                <h1>Daftar Kursus</h1>
 
                 <p>
-                    Lengkapi informasi berikut dengan benar.
+                    Lengkapi data berikut untuk memulai perjalanan
+                    belajar kamu bersama KursusKu.
                 </p>
 
             </div>
 
+            <!-- PESAN ERROR -->
 
+            <?php if (!empty($_SESSION['form_errors'])
+                && is_array($_SESSION['form_errors'])): ?>
 
-            <!-- =================================================
-                 FORM
-                 ================================================= -->
+                <div class="alert-error">
+
+                    <strong>Periksa kembali data kamu:</strong>
+
+                    <ul>
+                        <?php foreach ($_SESSION['form_errors'] as $error): ?>
+                            <li><?= registerEscape($error) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+
+                </div>
+
+                <?php unset($_SESSION['form_errors']); ?>
+
+            <?php endif; ?>
+
+            <!-- FORM -->
 
             <form
                 action="process-registration.php"
@@ -1207,515 +481,327 @@ require __DIR__ . '/helpers.php';
                 class="registration-form"
             >
 
+                <div class="form-grid">
 
-                <!-- FORM TYPE -->
+                    <!-- NAMA -->
 
-                <input
-                    type="hidden"
-                    name="form_type"
-                    value="form1"
-                >
+                    <div class="form-group">
 
+                        <label for="name">Nama Lengkap</label>
 
-                <!-- SOURCE -->
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Masukkan nama lengkap"
+                            value="<?= registerEscape($old['name'] ?? '') ?>"
+                            autocomplete="name"
+                            required
+                        >
 
-                <input
-                    type="hidden"
-                    name="source"
-                    value="week-05"
-                >
+                    </div>
 
+                    <!-- EMAIL -->
 
+                    <div class="form-group">
 
-                <!-- =================================================
-                     NAMA
-                     ================================================= -->
+                        <label for="email">Email</label>
 
-                <div class="form-group">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="contoh@email.com"
+                            value="<?= registerEscape($old['email'] ?? '') ?>"
+                            autocomplete="email"
+                            required
+                        >
 
-                    <label for="name_form1">
-                        Nama Lengkap
-                    </label>
+                    </div>
 
+                    <!-- NOMOR HP -->
 
-                    <input
-                        type="text"
-                        id="name_form1"
-                        name="name"
-                        placeholder="Masukkan nama lengkap"
-                        required
-                    >
+                    <div class="form-group">
 
-                </div>
+                        <label for="phone">Nomor HP</label>
 
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="08xxxxxxxxxx"
+                            value="<?= registerEscape($old['phone'] ?? '') ?>"
+                            autocomplete="tel"
+                            required
+                        >
 
+                    </div>
 
-                <!-- =================================================
-                     EMAIL
-                     ================================================= -->
+                    <!-- PROGRAM STUDI -->
 
-                <div class="form-group">
+                    <div class="form-group">
 
-                    <label for="email_form1">
-                        Email
-                    </label>
+                        <label for="study_program">Program Studi</label>
 
+                        <input
+                            type="text"
+                            id="study_program"
+                            name="study_program"
+                            placeholder="Contoh: PTIK"
+                            value="<?= registerEscape($old['study_program'] ?? '') ?>"
+                            required
+                        >
 
-                    <input
-                        type="email"
-                        id="email_form1"
-                        name="email"
-                        placeholder="nama@email.com"
-                        required
-                    >
+                    </div>
 
-                </div>
+                    <!-- PILIH KURSUS -->
 
+                    <div class="form-group full-width">
 
+                        <label for="course_code">Pilih Kursus</label>
 
-                <!-- =================================================
-                     NOMOR HP
-                     ================================================= -->
+                        <select
+                            id="course_code"
+                            name="course_code"
+                            required
+                        >
 
-                <div class="form-group">
+                            <option value="">-- Pilih Kursus --</option>
 
-                    <label for="phone_form1">
-                        Nomor HP
-                    </label>
+                            <?php foreach ($courses as $code => $course): ?>
 
+                                <option
+                                    value="<?= registerEscape($code) ?>"
+                                    <?= (($old['course_code'] ?? '') === $code)
+                                        ? 'selected'
+                                        : '' ?>
+                                >
+                                    <?= registerEscape($course['name']) ?>
+                                    — Rp<?= number_format(
+                                        $course['price'],
+                                        0,
+                                        ',',
+                                        '.'
+                                    ) ?>
+                                </option>
 
-                    <input
-                        type="tel"
-                        id="phone_form1"
-                        name="phone"
-                        placeholder="08xxxxxxxxxx"
-                        required
-                    >
+                            <?php endforeach; ?>
 
-                </div>
+                        </select>
 
+                    </div>
 
+                    <!-- TIPE PESERTA -->
 
-                <!-- =================================================
-                     PROGRAM STUDI
-                     ================================================= -->
+                    <div class="form-group">
 
-                <div class="form-group">
+                        <label for="participant_type">Tipe Peserta</label>
 
-                    <label for="study_program_form1">
-                        Program Studi
-                    </label>
+                        <select
+                            id="participant_type"
+                            name="participant_type"
+                            required
+                        >
 
-
-                    <select
-                        id="study_program_form1"
-                        name="study_program"
-                        
-                    >
-
-                        <option value="">
-                            -- Pilih Program Studi --
-                        </option>
-
-
-                        <option value="PTIK">
-                            PTIK
-                        </option>
-
-
-                        <option value="Informatika">
-                            Informatika
-                        </option>
-
-
-                        <option value="Sistem Informasi">
-                            Sistem Informasi
-                        </option>
-
-
-                        <option value="Manajemen">
-                            Manajemen
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-
-                <!-- =================================================
-                     KURSUS
-                     ================================================= -->
-
-                <div class="form-group">
-
-                    <label for="course_code_form1">
-                        Pilih Kursus
-                    </label>
-
-
-                    <select
-                        id="course_code_form1"
-                        name="course_code"
-                        required
-                    >
-
-                        <option value="">
-                            -- Pilih Kursus --
-                        </option>
-
-
-                        <?php foreach ($courses as $course): ?>
+                            <option value="">-- Pilih Tipe --</option>
 
                             <option
-                                value="<?= e($course['code']) ?>"
+                                value="mahasiswa"
+                                <?= (($old['participant_type'] ?? '') === 'mahasiswa')
+                                    ? 'selected'
+                                    : '' ?>
                             >
-
-                                <?= e($course['name']) ?>
-
-                                —
-
-                                <?= rupiah($course['fee']) ?>
-
+                                Mahasiswa (diskon 20%)
                             </option>
 
-                        <?php endforeach; ?>
-
-
-                    </select>
-
-                </div>
-
-
-
-                <!-- =================================================
-                     TIPE PESERTA
-                     ================================================= -->
-
-                <fieldset class="choice-field">
-
-                    <legend>
-                        Tipe Peserta
-                    </legend>
-
-
-                    <div class="choice-row">
-
-
-                        <label class="choice">
-
-                            <input
-                                type="radio"
-                                name="participant_type"
-                                value="mahasiswa"
-                                required
-                            >
-
-                            <span>
-                                Mahasiswa
-                            </span>
-
-                        </label>
-
-
-                        <label class="choice">
-
-                            <input
-                                type="radio"
-                                name="participant_type"
+                            <option
                                 value="guru"
+                                <?= (($old['participant_type'] ?? '') === 'guru')
+                                    ? 'selected'
+                                    : '' ?>
                             >
+                                Guru (diskon 15%)
+                            </option>
 
-                            <span>
-                                Guru
-                            </span>
-
-                        </label>
-
-
-                        <label class="choice">
-
-                            <input
-                                type="radio"
-                                name="participant_type"
+                            <option
                                 value="umum"
+                                <?= (($old['participant_type'] ?? '') === 'umum')
+                                    ? 'selected'
+                                    : '' ?>
                             >
+                                Umum (tanpa diskon)
+                            </option>
 
-                            <span>
-                                Umum
-                            </span>
-
-                        </label>
-
+                        </select>
 
                     </div>
 
-                </fieldset>
+                    <!-- METODE BELAJAR -->
 
+                    <div class="form-group">
 
+                        <label for="learning_mode">Metode Belajar</label>
 
-                <!-- =================================================
-                     MINAT BELAJAR
-                     ================================================= -->
+                        <select
+                            id="learning_mode"
+                            name="learning_mode"
+                            required
+                        >
 
-                <fieldset class="choice-field">
+                            <option value="">-- Pilih Metode --</option>
 
-                    <legend>
-                        Minat Belajar
-                    </legend>
+                            <option
+                                value="offline"
+                                <?= (($old['learning_mode'] ?? '') === 'offline')
+                                    ? 'selected'
+                                    : '' ?>
+                            >
+                                Tatap Muka
+                            </option>
 
+                            <option
+                                value="online"
+                                <?= (($old['learning_mode'] ?? '') === 'online')
+                                    ? 'selected'
+                                    : '' ?>
+                            >
+                                Online
+                            </option>
 
-                    <div class="choice-grid">
+                            <option
+                                value="hybrid"
+                                <?= (($old['learning_mode'] ?? '') === 'hybrid')
+                                    ? 'selected'
+                                    : '' ?>
+                            >
+                                Hybrid
+                            </option>
 
+                        </select>
 
-                        <?php foreach ($interestOptions as $key => $label): ?>
+                    </div>
 
-                            <label class="choice">
+                    <!-- JUMLAH PAKET -->
 
-                                <input
-                                    type="checkbox"
-                                    name="interests[]"
-                                    value="<?= e($key) ?>"
+                    <div class="form-group full-width">
+
+                        <label for="package_count">Jumlah Paket</label>
+
+                        <select
+                            id="package_count"
+                            name="package_count"
+                            required
+                        >
+
+                            <option value="">-- Pilih Jumlah Paket --</option>
+
+                            <?php for ($i = 1; $i <= 3; $i++): ?>
+
+                                <option
+                                    value="<?= $i ?>"
+                                    <?= ((string) ($old['package_count'] ?? '1') === (string) $i)
+                                        ? 'selected'
+                                        : '' ?>
                                 >
+                                    <?= $i ?> paket
+                                </option>
 
-                                <span>
-                                    <?= e($label) ?>
-                                </span>
+                            <?php endfor; ?>
 
-                            </label>
-
-                        <?php endforeach; ?>
-
+                        </select>
 
                     </div>
 
-                </fieldset>
+                    <!-- MINAT BELAJAR -->
 
+                    <fieldset class="form-group full-width interests-box">
 
+                        <legend>Minat Belajar</legend>
 
-                <!-- =================================================
-                     METODE BELAJAR
-                     ================================================= -->
+                        <p class="field-hint">
+                            Kamu boleh memilih lebih dari satu minat.
+                        </p>
 
-                <div class="form-group">
+                        <div class="checkbox-list">
 
-                    <label for="learning_mode_form1">
-                        Metode Belajar
-                    </label>
+                            <?php foreach ($interestOptions as $value => $label): ?>
 
+                                <label class="checkbox-item">
 
-                    <select
-                        id="learning_mode_form1"
-                        name="learning_mode"
-                        
-                    >
+                                    <input
+                                        type="checkbox"
+                                        name="interests[]"
+                                        value="<?= registerEscape($value) ?>"
+                                        <?= in_array(
+                                            $value,
+                                            $selectedInterests,
+                                            true
+                                        ) ? 'checked' : '' ?>
+                                    >
 
-                        <option value="">
-                            -- Pilih Metode --
-                        </option>
+                                    <span>
+                                        <?= registerEscape($label) ?>
+                                    </span>
 
+                                </label>
 
-                        <option value="offline">
-                            Tatap Muka
-                        </option>
+                            <?php endforeach; ?>
 
+                        </div>
 
-                        <option value="online">
-                            Online
-                        </option>
+                    </fieldset>
 
+                    <!-- CATATAN -->
 
-                        <option value="hybrid">
-                            Hybrid
-                        </option>
+                    <div class="form-group full-width">
 
+                        <label for="notes">Catatan (opsional)</label>
 
-                    </select>
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="4"
+                            placeholder="Tulis catatan jika ada..."
+                        ><?= registerEscape($old['notes'] ?? '') ?></textarea>
 
-                </div>
-
-
-
-                <!-- =================================================
-                     JUMLAH PAKET
-                     ================================================= -->
-
-                <div class="form-group">
-
-                    <label for="package_count_form1">
-                        Jumlah Paket
-                    </label>
-
-
-                    <select
-                        id="package_count_form1"
-                        name="package_count"
-                        required
-                    >
-
-                        <option value="">
-                            -- Pilih Paket --
-                        </option>
-
-
-                        <option value="1">
-                            1 Paket
-                        </option>
-
-
-                        <option value="2">
-                            2 Paket
-                        </option>
-
-
-                        <option value="3">
-                            3 Paket
-                        </option>
-
-
-                    </select>
+                    </div>
 
                 </div>
 
+                <!-- TOMBOL -->
 
-
-                <!-- =================================================
-                     CATATAN
-                     ================================================= -->
-
-                <div class="form-group">
-
-                    <label for="notes_form1">
-                        Catatan Tambahan
-                    </label>
-
-
-                    <textarea
-                        id="notes_form1"
-                        name="notes"
-                        maxlength="300"
-                        placeholder="Tulis catatan jika ada..."
-                    ></textarea>
-
-                </div>
-
-
-
-                <!-- =================================================
-                     TOMBOL
-                     ================================================= -->
-
-                <div class="registration-actions">
-
-
-                    <!-- KEMBALI -->
-
-                    <a
-                        href="index.php"
-                        class="btn-reg btn-back"
-                    >
-                        ← Kembali
-                    </a>
-
-
-
-                    <!-- PROSES PENDAFTARAN -->
+                <div class="form-actions">
 
                     <button
                         type="submit"
-                        class="btn-reg btn-yellow"
+                        class="btn btn-primary"
                     >
-                        ✓ Proses Pendaftaran
+                        Daftar Sekarang <span>&rarr;</span>
                     </button>
 
-
-
-                    <!-- HISTORY DUMMY -->
-
                     <a
-                        href="history.php"
-                        class="btn-reg btn-history"
+                        href="index.php"
+                        class="btn btn-secondary"
                     >
-                        🕘 History Dummy
+                        Kembali
                     </a>
 
-
-
-                    <!-- LOOP LAB -->
-
-                    <a
-                        href="loop-lab.php"
-                        class="btn-reg btn-loop"
-                    >
-                        ∞ Loop Lab
-                    </a>
-
-
                 </div>
-
-
-
-                <!-- =================================================
-                     FASILITAS
-                     ================================================= -->
-
-                <div class="course-facilities">
-
-
-                    <h3>
-                        Fasilitas Kursus
-                    </h3>
-
-
-                    <ul>
-
-                        <li>
-                            Modul digital
-                        </li>
-
-                        <li>
-                            Sertifikat penyelesaian
-                        </li>
-
-                        <li>
-                            Forum diskusi kelas
-                        </li>
-
-                    </ul>
-
-
-                </div>
-
 
             </form>
 
+        </section>
 
-        </div>
+    </main>
 
+    <!-- FOOTER -->
 
-    </div>
-
-
-</section>
-
-
-</main>
-
-
-
-<!-- =====================================================
-     FOOTER
-     ===================================================== -->
-
-<footer class="registration-footer">
-
-    <p>
-        © 2026 KursusKu — Belajar Skill Digital
-    </p>
-
-</footer>
-
+    <footer class="footer">
+        <p>
+            &copy; <?= date('Y') ?> KursusKu.
+            Belajar jadi lebih mudah.
+        </p>
+    </footer>
 
 </body>
-
 </html>

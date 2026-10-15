@@ -664,12 +664,81 @@
 
             </div>
 
-
         </div>
 
     </div>
 
 </section>
+
+<!-- =================================================
+     KURSUS 4 - PHP DASAR
+     ================================================= -->
+
+<div class="course-card">
+
+    <div class="course-image">
+
+        <img
+            src="assets/images/php.svg"
+            alt="PHP Dasar"
+        >
+
+        <span class="course-badge">
+            PEMULA
+        </span>
+
+    </div>
+
+    <div class="course-content">
+
+        <span class="course-category">
+            PROGRAMMING
+        </span>
+
+        <h3>
+            PHP Dasar
+        </h3>
+
+        <p>
+            Pelajari dasar PHP untuk membuat website
+            dinamis dan interaktif.
+        </p>
+
+        <div class="course-meta">
+
+            <span>★ 4.8</span>
+            <span>14 Materi</span>
+            <span>4 Jam</span>
+
+        </div>
+
+        <div class="course-bottom">
+
+            <div class="price">
+
+                <del>
+                    Rp199.000
+                </del>
+
+                <strong>
+                    Rp149.000
+                </strong>
+
+            </div>
+
+            <a
+                href="registration.php"
+                class="course-button"
+            >
+                Daftar
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 </section>
 

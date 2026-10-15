@@ -19,7 +19,7 @@ function formatTanggal(string $date): string
 {
     $value = new DateTimeImmutable($date);
 
-    return $value->format('d-m-Y');
+    return $value->format('15-10-2026');
 }
 
 function e(string $value): string
